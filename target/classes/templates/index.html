@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<div class="container">
+    <h2>Payment</h2>
+<form action="order" method="post">
+    <label>Order Details</label>
+    <input type="text" name="order_Details">
+    <label for="title">Title</label><br/>
+    <select name="title">
+        <option value="">Select</option>
+        <option value="Mr">Mr</option>
+        <option value="Mrs">Mrs</option>
+        <option value="Miss">Miss</option>
+        <option value="Dr">Dr</option>
+
+    </select>
+<label for="firstname">First Name</label><br/>
+<input type="text" name="fname"><br/>
+<label for="lastname">Last Name</label><br/>
+<input type="text" name="lname"><br/>
+<label for="email">Email</label><br/>
+<input type="email" name="email"><br/>
+<label for="phone">Phone number</label><br/>
+<input type="tel" required pattern="[0-9]{10}" maxlength="10" name="phone"><br/>
+    <label for="address">Address</label><br/>
+    <input type="text" name="address"><br/>
+    <label for="paymentMethod">Payment Method</label><br/>
+<select name="paymentMethod">
+    <option value="">Select</option>
+    <option value="card">Credit Card</option>
+    <option value="Cash on delivery">Cash on Delivery</option>
+</select>
+<button type="submit">Submit</button>
+</form>
+</body>
+</html>
