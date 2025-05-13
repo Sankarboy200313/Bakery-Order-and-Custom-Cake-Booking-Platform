@@ -22,13 +22,13 @@ public class IndexController {
     @PostMapping("/order")
     public String userRegistration(@ModelAttribute Order user, RedirectAttributes redirectAttributes) {
         saveOrderToFile(user);
-        redirectAttributes.addFlashAttribute("order", user); // Send order details via flash attributes
-        return "redirect:/order-details"; // Redirect to avoid resubmission
+        redirectAttributes.addFlashAttribute("order", user);
+        return "redirect:/order-details";
     }
 
     @GetMapping("/order-details")
     public String showOrderDetailsPage() {
-        return "order-details"; // This view will use the flash attribute "order"
+        return "order-details";
     }
 
     private void saveOrderToFile(Order order) {
@@ -88,7 +88,7 @@ public class IndexController {
         }
 
         redirectAttributes.addFlashAttribute("message", "Your order has been cancelled.");
-        return "redirect:/cancel-success"; // Redirect to prevent repeated deletion
+        return "redirect:/cancel-success";
     }
 
     @GetMapping("/cancel-success")
