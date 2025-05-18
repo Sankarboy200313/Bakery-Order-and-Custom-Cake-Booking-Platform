@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <!-- Link to Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav>
+    <input type="checkbox" id="res-menu">
+    <label for="res-menu">
+        <i class="fas fa-bars" id="s1"></i>
+        <i class="fas fa-times" id="s2"></i>
+    </label>
+    <h2>Your Online</h2>
+    <h1>Bakery Store</h1>
+    <ul>
+        <li><a th:href="@{/dashboard}">Home</a></li>
+        <li><a th:href="@{/order}">Order</a></li>
+        <li><a th:href="@{/chart}">Chart</a></li>
+        <li><a th:href="@{/aboutUs}">About Us</a></li>
+        <li><a th:href="@{/service}">Services</a></li>
+        <li th:if="${!isLoggedIn}" class="nav-button"><a href="/login">Login</a></li>
+        <li th:if="${isLoggedIn}" class="nav-button"><a href="/profile">Profile</a></li>
+    </ul>
+</nav>
+<hr>
+<!-- Login Form -->
+<div class="login-container">
+    <h2>Login</h2>
+    <!-- Display error message if present -->
+    <p th:if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></p>
+    <form th:action="@{/login}" method="post">
+        <input type="text" class="input-field" placeholder="Username" name="username" required>
+        <input type="password" class="input-field" placeholder="Password" name="password" required>
+        <button type="submit" class="submit-btn">Login</button>
+    </form>
+    <br>
+        <a th:href="@{/signup}">Sign Up</a>
+    </div>
+</div>
+</body>
+</html>

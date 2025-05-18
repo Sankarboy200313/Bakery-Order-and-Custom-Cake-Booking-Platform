@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <!-- Link to external stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<!-- Navigation header and list -->
+<nav>
+    <input type="checkbox" id="res-menu">
+    <label for="res-menu">
+        <i class="fas fa-bars" id="s1"></i>
+        <i class="fas fa-times" id="s2"></i>
+    </label>
+    <h2>Your Online</h2>
+    <h1>Bakery Store</h1>
+    <ul>
+        <li><a th:href="@{/dashboard}">Home</a></li>
+        <li><a th:href="@{/order}">Order</a></li>
+        <li><a th:href="@{/chart}">Chart</a></li>
+        <li><a th:href="@{/aboutUs}">About Us</a></li>
+        <li><a th:href="@{/service}">Services</a></li>
+        <li th:if="${!isLoggedIn}" class="nav-button"><a href="/login">Login</a></li>
+        <li th:if="${isLoggedIn}" class="nav-button"><a href="/profile">Profile</a></li>
+    </ul>
+</nav>
+<hr>
+<!-- Container for user profile details -->
+<div class="login-container">
+    <h2>User Profile</h2>
+    <!-- Display the username with requested format -->
+    <p><strong>Username:</strong> <span th:text="${user.username}"></span>, <strong>Email:</strong> <span th:text="${user.email}"></span></p>
+    <!-- Display the full name with requested format -->
+    <p><strong>Full Name:</strong> <span th:text="${user.fullname}"></span>, <strong>Telephone:</strong> <span th:text="${user.telephoneNo}"></span></p>
+    <br><br>
+    <!-- Link to return to the dashboard -->
+    <p><a href="/dashboard">Back to Dashboard</a></p>
+    <br>
+    <!-- Delete Account button -->
+    <p><a href="/delete-account"  onclick="return confirm('Are you sure you want to delete your account?')">Delete Account</a></p>
+    <!-- Logout button to end the session -->
+    <br><p><a href="/logout" >Logout</a></p>
+</div>
+</body>
+</html>
