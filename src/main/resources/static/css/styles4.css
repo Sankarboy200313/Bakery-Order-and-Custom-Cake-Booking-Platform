@@ -2,8 +2,7 @@
     margin-top: 20px;
     text-align: center;
 }
-
-.update-btn, .cancel-btn {
+.cancel-btn {
     padding: 10px 20px;
     font-size: 14px;
     margin: 0 10px;
@@ -11,14 +10,20 @@
     border-radius: 5px;
     cursor: pointer;
 }
-
 .home-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.home-btn{
     background-color: #3498db;
     color: white;
 }
 
 .cancel-btn {
     background-color: #e67e22;
-    color: white
-;
+    color: white;
 }

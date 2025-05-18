@@ -2,13 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Order Details</title>
+
     <link rel="stylesheet" th:href="@{/css/styles2.css}">
+    <link rel="stylesheet" th:href="@{/css/styles3.css}">
+    <link rel="stylesheet" th:href="@{/css/styles4.css}">
 </head>
 <body>
 <div class="popup">
     <h1>Thank you for your order!</h1>
-    <h2>Order Summary:</h2>
-
     <div class="summary-box">
         <p><strong>Title:</strong> <span th:text="${order.title}"></span></p>
         <p><strong>First Name:</strong> <span th:text="${order.fname}"></span></p>
@@ -19,18 +20,15 @@
         <p><strong>Order Details:</strong> <span th:text="${order.order_Details}"></span></p>
         <p><strong>Payment Method:</strong> <span th:text="${order.paymentMethod}"></span></p>
 
-
         <div class="button-container">
-            <link rel="stylesheet" th:href="@{/css/styles4.css}">
-            <button type="submit" class="update-btn">Go to home</button>
+            <button type="button" class="home-btn" >Go to home</button>
             <button type="button" class="cancel-btn" onclick="showConfirmation()">Cancel Order</button>
         </div>
+
     </div>
 </div>
 
-
 <div id="confirmPopup" class="confirm-popup">
-    <link rel="stylesheet" th:href="@{/css/styles3.css}">
     <div class="confirm-box">
         <p>Are you sure you want to cancel this order?</p>
         <div class="popup-buttons">
@@ -41,16 +39,6 @@
         </div>
     </div>
 </div>
-
-<div id="successPopup" class="confirm-popup">
-    <div class="confirm-box">
-        <p>Your order has been canceled.</p>
-        <div class="popup-buttons">
-            <a href="/" class="home-btn">Home</a>
-        </div>
-    </div>
-</div>
-
 
 <script th:src="@{/js/orderDetails.js}"></script>
 
