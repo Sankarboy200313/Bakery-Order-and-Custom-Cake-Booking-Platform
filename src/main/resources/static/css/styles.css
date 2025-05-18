@@ -106,7 +106,7 @@ label #s1, label #s2 {
         font-size: 16px;
     }
 
-    /* For Responsive State */
+
     #res-menu:checked ~ ul {
         left: 0;
     }
@@ -118,26 +118,7 @@ label #s1, label #s2 {
     #res-menu:checked ~ label #s2 {
         display: block;
     }
-    /* Banner */
-    .banner-text h2,.banner-text h1{
-        font-size: 40px;
-    }
-    .banner-text p{
-        font-size: 15px;
-    }
-}
 
-
-.hide-banner {
-    display: none !important;
-}
-
-
-.services {
-    top: 100px;
-    text-align: center;
-    padding-top: 100px;
-    background-color: #f8f5f2;
 }
 .container {
     background: #ffffff;
