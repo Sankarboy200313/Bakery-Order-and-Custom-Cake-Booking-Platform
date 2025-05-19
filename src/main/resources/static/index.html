@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Bakery Products</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <header>
+        <h1>SLIIT Bakery</h1>
+        <nav>
+            <ul>
+                <li class="active">Products</li>
+                <li onclick="window.location.href='custom-cake.html'">Custom Cake</li>
+                <li onclick="window.location.href='orders.html'">Orders</li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="product-section" id="productList">
+        <!-- Products will be loaded here dynamically -->
+    </main>
+
+    <script>
+        // Load products from JSON file
+        fetch('http://localhost:8080/api/products')
+            .then(response => response.json())
+            .then(products => {
+                const productList = document.getElementById('productList');
+                products.forEach(product => {
+                    const productCard = `
+                        <div class="product-card">
+                            <img src="${product.imageUrl}" alt="${product.name}"/>
+                            <h2>${product.name}</h2>
+                            <p>${product.description}</p>
+                            <div class="stars">${'★'.repeat(product.rating)}${'☆'.repeat(5-product.rating)}</div>
+                            <div class="price">Rs.${product.price}</div>
+                            <button onclick="addToCart('${product.id}')">Add</button>
+                            <input type="number" min="1" value="1" placeholder="Qty" class="quantity-box" />
+                        </div>
+                    `;
+                    productList.innerHTML += productCard;
+                });
+            })
+            .catch(error => console.error('Error loading products:', error));
+
+        function addToCart(productId) {
+            // Implement cart functionality here
+            alert('Product added to cart!');
+        }
+    </script>
+</body>
+</html> 

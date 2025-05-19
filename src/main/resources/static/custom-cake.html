@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Custom Cake Ordering</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-overlay"></div>
+
+    <header>
+        <h1>SLIIT Bakery</h1>
+        <nav>
+            <ul>
+                <li onclick="window.location.href='index.html'">Products</li>
+                <li class="active">Custom Cake</li>
+                <li onclick="window.location.href='orders.html'">Orders</li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Order Your Custom Cake</h2>
+        <form id="cakeForm" onsubmit="submitOrder(event)">
+            <label for="flavor">Choose Cake Flavor:</label>
+            <select id="flavor" required onchange="updatePrice()">
+                <option value="">Select</option>
+                <option value="Vanilla">Vanilla - Rs.2000</option>
+                <option value="Chocolate">Chocolate - Rs.2000</option>
+                <option value="Strawberry">Strawberry - Rs.2000</option>
+            </select>
+
+            <label for="shape">Choose Cake Shape:</label>
+            <select id="shape" required onchange="updatePrice()">
+                <option value="">Select</option>
+                <option value="Round">Round</option>
+                <option value="Square">Square</option>
+                <option value="Heart">Heart</option>
+            </select>
+
+            <fieldset>
+                <legend>Select Toppings:</legend>
+                <div class="topping-option">
+                    <input type="checkbox" id="cherry" name="toppings" value="Cherry" data-price="250" onchange="updatePrice()">
+                    <label for="cherry">Cherry (+Rs.250)</label>
+                </div>
+                <div class="topping-option">
+                    <input type="checkbox" id="nuts" name="toppings" value="Nuts" data-price="300" onchange="updatePrice()">
+                    <label for="nuts">Nuts (+Rs.300)</label>
+                </div>
+                <div class="topping-option">
+                    <input type="checkbox" id="cashews" name="toppings" value="Cashews" data-price="350" onchange="updatePrice()">
+                    <label for="cashews">Cashews (+Rs.350)</label>
+                </div>
+            </fieldset>
+
+            <div id="priceDisplay" class="price-display">
+                <p>Base Price: Rs.2000</p>
+                <p>Toppings: Rs.<span id="toppingsPrice">0</span></p>
+                <p><strong>Total Price: Rs.<span id="totalPrice">2000</span></strong></p>
+            </div>
+
+            <label for="message">Enter Custom Message:</label>
+            <input type="text" id="message" placeholder="Happy Birthday!" required>
+
+            <button type="submit">Place Order</button>
+        </form>
+    </div>
+
+    <script>
+        function calculatePrice() {
+            const basePrice = 2000;
+            let totalPrice = basePrice;
+            
+            // Add toppings prices
+            const selectedToppings = document.querySelectorAll('input[name="toppings"]:checked');
+            let toppingsPrice = 0;
+            selectedToppings.forEach(topping => {
+                toppingsPrice += parseInt(topping.dataset.price);
+            });
+            
+            totalPrice += toppingsPrice;
+            return { totalPrice, toppingsPrice };
+        }
+
+        function updatePrice() {
+            const { totalPrice, toppingsPrice } = calculatePrice();
+            document.getElementById('toppingsPrice').textContent = toppingsPrice;
+            document.getElementById('totalPrice').textContent = totalPrice;
+        }
+
+        function submitOrder(event) {
+            event.preventDefault();
+
+            const flavor = document.getElementById('flavor').value;
+            const shape = document.getElementById('shape').value;
+            const message = document.getElementById('message').value;
+            const toppingCheckboxes = document.querySelectorAll('input[name="toppings"]:checked');
+            const toppings = Array.from(toppingCheckboxes).map(cb => cb.value);
+            const { totalPrice } = calculatePrice();
+
+            const order = {
+                flavor: flavor,
+                shape: shape,
+                toppings: toppings.length > 0 ? toppings.join(', ') : 'None',
+                message: message,
+                totalAmount: totalPrice
+            };
+
+            // Send order to backend
+            fetch('http://localhost:8080/api/custom-cakes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(order)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Redirect to summary page with order details
+                const orderDetails = encodeURIComponent(JSON.stringify({
+                    id: data.id,
+                    flavor: data.flavor,
+                    shape: data.shape,
+                    toppings: data.toppings,
+                    message: data.message,
+                    totalAmount: data.totalAmount
+                }));
+                window.location.href = `summary.html?order=${orderDetails}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error placing order. Please try again.');
+            });
+        }
+
+        // Initialize price display
+        updatePrice();
+    </script>
+</body>
+</html> 

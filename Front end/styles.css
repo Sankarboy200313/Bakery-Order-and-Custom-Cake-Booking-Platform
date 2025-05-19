@@ -1,0 +1,127 @@
+/* Body with light to deep brown gradient */
+body {
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    color: #f4f4f4;
+    background: url('Yummy-Chocolate-Cake-Best-Wallpaper-46981.jpg') no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+    z-index: 0;
+    height: 100vh; /* Ensure full height */
+    display: flex;
+    align-items: center; /* Center vertically */
+}
+
+/* Cake Background Image (low opacity and remove background) */
+.cake-background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60vw;
+    height: 100vh;
+    background-image: url(''); /* Add transparent cake PNG */
+    background-repeat: no-repeat;
+    background-position: center right;
+    background-size: contain;
+    opacity: 0.15;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.cake-background-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60vw;
+    height: 100vh;
+    background-image: url(''); /* Add transparent cake PNG */
+    background-repeat: no-repeat;
+    background-position: center left;
+    background-size: contain;
+    opacity: 0.15;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Card container with semi-transparent dark brown gradient (Centered on Y-axis, aligned left) */
+.container {
+    position: absolute;
+    left: 5%; /* Moves the box to the left */
+    top: 50%; /* Centers it vertically */
+    transform: translateY(-50%); /* Ensures perfect vertical centering */
+    z-index: 1;
+    max-width: 600px;
+    background: linear-gradient(to bottom right, rgba(169, 116, 110, 0.88), rgba(78, 52, 46, 0.88));
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+    color: #fff;
+}
+
+/* Headings - Updated Font Style for "Order Your Custom Cake" */
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-family: 'Playfair Display', serif; /* Professional and attractive font */
+    font-size: 2.2rem; /* Slightly larger for emphasis */
+    font-weight: bold;
+}
+
+/* Form inputs and selects */
+form label,
+form select,
+form input,
+form fieldset,
+form legend {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    font-size: 1rem;
+}
+
+input[type="text"], select {
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Corrected Toppings checkboxes alignment */
+fieldset {
+    border: none;
+    margin: 10px 0;
+    padding: 0;
+}
+
+/* Ensure checkboxes are directly aligned with labels */
+.topping-option {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adds spacing between checkbox and label */
+    margin-bottom: 8px;
+}
+
+.topping-option input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+/* Buttons with light brown gradient */
+button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, #d7ccc8, #a1887f); /* Light brown gradient */
+    color: #3e2723;
+    border: none;
+    margin-top: 15px;
+    font-size: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: linear-gradient(to right, #bcaaa4, #8d6e63); /* Slightly darker on hover */
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .status-box {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #dff0d8;
+            border: 1px solid #d6e9c6;
+            color: #3c763d;
+        }
+        .error {
+            background-color: #f2dede;
+            border: 1px solid #ebccd1;
+            color: #a94442;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #responseDetails {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Backend Connection Test</h1>
+    
+    <button onclick="testConnection()">Test Connection</button>
+    <button onclick="testCreateOrder()">Test Create Order</button>
+    <button onclick="testGetOrders()">Test Get Orders</button>
+    
+    <div id="connectionStatus"></div>
+    <div id="responseDetails"></div>
+
+    <script>
+        const BASE_URL = 'http://localhost:8080/api/custom-cakes';
+
+        function displayResult(success, message, details = '') {
+            const statusDiv = document.getElementById('connectionStatus');
+            const detailsDiv = document.getElementById('responseDetails');
+            
+            statusDiv.className = 'status-box ' + (success ? 'success' : 'error');
+            statusDiv.textContent = message;
+            
+            if (details) {
+                detailsDiv.innerHTML = '<h3>Response Details:</h3><pre>' + 
+                    JSON.stringify(details, null, 2) + '</pre>';
+            } else {
+                detailsDiv.innerHTML = '';
+            }
+        }
+
+        function testConnection() {
+            fetch(`${BASE_URL}/test-connection`)
+                .then(response => response.json())
+                .then(data => {
+                    displayResult(true, 'Successfully connected to backend!', data);
+                })
+                .catch(error => {
+                    displayResult(false, 'Failed to connect to backend: ' + error.message);
+                });
+        }
+
+        function testCreateOrder() {
+            const testOrder = {
+                flavor: "Vanilla",
+                shape: "Round",
+                toppings: "Cherry",
+                message: "Test Order"
+            };
+
+            fetch(`${BASE_URL}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(testOrder)
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayResult(true, 'Successfully created test order!', data);
+            })
+            .catch(error => {
+                displayResult(false, 'Failed to create test order: ' + error.message);
+            });
+        }
+
+        function testGetOrders() {
+            fetch(`${BASE_URL}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayResult(true, 'Successfully retrieved orders!', data);
+                })
+                .catch(error => {
+                    displayResult(false, 'Failed to get orders: ' + error.message);
+                });
+        }
+    </script>
+</body>
+</html> 

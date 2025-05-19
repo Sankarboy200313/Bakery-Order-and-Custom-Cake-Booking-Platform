@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Custom Cake Ordering</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Decorative Cake Background Image -->
+  <div class="cake-background"></div>
+
+  <div class="container">
+    <h1>Order Your Custom Cake</h1>
+    <form id="cakeForm" method="post" action="">
+      <label for="flavor">Choose Cake Flavor:</label>
+      <select id="flavor" required>
+        <option value="">Select</option>
+        <option value="Vanilla">Vanilla</option>
+        <option value="Chocolate">Chocolate</option>
+        <option value="Strawberry">Strawberry</option>
+      </select>
+
+      <label for="shape">Choose Cake Shape:</label>
+      <select id="shape" required>
+        <option value="">Select</option>
+        <option value="Round">Round</option>
+        <option value="Square">Square</option>
+        <option value="Heart">Heart</option>
+      </select>
+
+      <fieldset>
+        <legend>Select Toppings:</legend>
+        <div class="topping-option">
+          <input type="checkbox" id="cherry" name="toppings" value="Cherry">
+          <label for="cherry">Cherry</label>
+        </div>
+        <div class="topping-option">
+          <input type="checkbox" id="nuts" name="toppings" value="Nuts">
+          <label for="nuts">Nuts</label>
+        </div>
+        <div class="topping-option">
+          <input type="checkbox" id="cashews" name="toppings" value="Cashews">
+          <label for="cashews">Cashews</label>
+        </div>
+      </fieldset>
+
+      <label for="message">Enter Custom Message:</label>
+      <input type="text" id="message" placeholder="Happy Birthday!" required>
+
+      <!-- Buttons Section -->
+      <button type="submit">Place Order</button>
+      <button type="button" onclick="exitApp()">Exit</button>
+    </form>
+  </div>
+
+  <div class="cake-background-left"></div>
+  <div class="cake-background"></div>
+
+  <!-- JS to handle form submission -->
+  <script>
+    function exitApp() {
+      alert("Exiting the application...");
+      window.location.href = "https://www.google.com";
+    }
+
+    document.getElementById('cakeForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const flavor = document.getElementById('flavor').value;
+      const shape = document.getElementById('shape').value;
+      const message = document.getElementById('message').value;
+
+      const toppingCheckboxes = document.querySelectorAll('input[name="toppings"]:checked');
+      const toppings = Array.from(toppingCheckboxes).map(cb => cb.value).join(',');
+
+      // Redirect to summary.html with query params
+      const query = `?flavor=${encodeURIComponent(flavor)}&shape=${encodeURIComponent(shape)}&toppings=${encodeURIComponent(toppings)}&message=${encodeURIComponent(message)}`;
+      window.location.href = `summary.html${query}`;
+    });
+  </script>
+</body>
+</html>

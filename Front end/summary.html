@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Summary</title>
+  <link rel="stylesheet" href="summary.css" />
+</head>
+<body>
+  <!-- Left and Right Decorative Cake Backgrounds -->
+  <div class="cake-background-left"></div>
+  <div class="cake-background"></div>
+
+  <!-- Order Summary Card -->
+  <div class="summary-container">
+    <h1>Your Custom Cake Order Summary</h1>
+    <div class="summary-box">
+      <p><strong>Flavor:</strong> <span id="flavor">Vanilla</span></p>
+      <p><strong>Shape:</strong> <span id="shape">Round</span></p>
+      <p><strong>Toppings:</strong> <span id="toppings">Cherry, Nuts</span></p>
+      <p><strong>Message:</strong> <span id="message">Happy Birthday!</span></p>
+    </div>
+    <button onclick="goBack()">Back to Home</button>
+    <button onclick="reviewAllOrders()">Review All Orders</button>
+    <button onclick="placeAnotherOrder()">Place Another Order</button> <!-- New Button -->
+  </div>
+
+  <script>
+    function goBack() {
+      window.location.href = "index.html"; // Adjust if your homepage path differs
+    }
+
+    function reviewAllOrders() {
+      window.location.href = "orders.html"; // Updated path to the Review All Orders page
+    }
+
+    function placeAnotherOrder() {
+      window.location.href = "index.html"; // Connects to index.html when clicked
+    }
+
+    // Optionally inject dynamic order data here
+  </script>
+</body>
+</html>

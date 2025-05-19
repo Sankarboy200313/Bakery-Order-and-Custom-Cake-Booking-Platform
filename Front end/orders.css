@@ -1,0 +1,97 @@
+/* Body with light to deep brown gradient */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom right, #fbe4c4, #8d6e63);
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: #2e1c0e;
+}
+
+/* Cake Background Image (Right Side) */
+.cake-background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50vw; /* Covering right side */
+    height: 100vh;
+    background-image: url('ai-generated-black-forest-gateau-isolated-on-transparent-background-free-png.webp'); /* Replace with your image */
+    background-repeat: no-repeat;
+    background-position: center right;
+    background-size: cover;
+    opacity: 0.15;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Cake Background Image (Left Side) */
+.cake-background-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50vw; /* Covering left side */
+    height: 100vh;
+    background-image: url('pngtree-rich-layered-black-forest-dessert-png-image_19949555.png'); /* Replace with your image */
+    background-repeat: no-repeat;
+    background-position: center left;
+    background-size: cover;
+    opacity: 0.15;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Orders Container (Larger Size, Same Location) */
+.orders-container {
+    position: absolute;
+    left: 5%; /* Keeps it on the left */
+    top: 50%; /* Centers it vertically */
+    transform: translateY(-50%); /* Ensures perfect vertical centering */
+    z-index: 1;
+    max-width: 700px; /* Increased width */
+    padding: 50px; /* Increased padding */
+    background: linear-gradient(to bottom right, #a9746e, #4e342e);
+    border-radius: 18px;
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    text-align: center;
+}
+
+/* Heading */
+.orders-container h1 {
+    font-size: 2rem; /* Slightly larger */
+    margin-bottom: 30px;
+}
+
+/* Order Card */
+.order-card {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.order-card p {
+    margin: 8px 0;
+    font-size: 1.1rem;
+}
+
+/* Back & Add Payment Button with Light Brown Gradient */
+button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, #d7ccc8, #a1887f); /* Light brown gradient */
+    color: #3e2723;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    margin-top: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: linear-gradient(to right, #c38e63, #a97c5b); /* Slightly deeper on hover */
+}

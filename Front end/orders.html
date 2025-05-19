@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All Cake Orders</title>
+  <link rel="stylesheet" href="orders.css" />
+  <style>
+    /* Add background image without opacity reduction */
+    body {
+      background-image: url('Yummy-Chocolate-Cake-Best-Wallpaper-46981.jpg'); /* Replace with your actual image */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Orders Container (Moved to Left Side, Centered on Y-axis) -->
+  <div class="orders-container">
+    <h1>All Cake Orders</h1>
+    <div id="orders-list">
+      <!-- Sample Orders (replace or populate with backend logic) -->
+      <div class="order-card">
+        <p><strong>Flavor:</strong> Chocolate</p>
+        <p><strong>Shape:</strong> Heart</p>
+        <p><strong>Toppings:</strong> Cherry, Nuts</p>
+        <p><strong>Message:</strong> Happy Anniversary!</p>
+      </div>
+      <div class="order-card">
+        <p><strong>Flavor:</strong> Vanilla</p>
+        <p><strong>Shape:</strong> Round</p>
+        <p><strong>Toppings:</strong> Cashews</p>
+        <p><strong>Message:</strong> Congrats!</p>
+      </div>
+    </div>
+
+    <button onclick="goHome()">Back to Home</button>
+    <button onclick="addPayment()">Add Payment</button>
+  </div>
+
+  <script>
+    function goHome() {
+      window.location.href = "index.html"; // change if home file has a different name
+    }
+
+    function addPayment() {
+      window.location.href = "payment.html"; // replace with actual payment page if needed
+    }
+  </script>
+</body>
+</html>

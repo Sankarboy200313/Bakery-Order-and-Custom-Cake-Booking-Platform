@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-overlay"></div>
+
+    <header>
+        <h1>SLIIT Bakery</h1>
+        <nav>
+            <ul>
+                <li onclick="window.location.href='index.html'">Products</li>
+                <li onclick="window.location.href='custom-cake.html'">Custom Cake</li>
+                <li class="active">Orders</li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Order History</h2>
+        <div id="ordersList">
+            <!-- Orders will be loaded here dynamically -->
+        </div>
+    </div>
+
+    <script>
+        // Load orders when page loads
+        document.addEventListener('DOMContentLoaded', loadOrders);
+
+        function loadOrders() {
+            fetch('http://localhost:8080/api/orders')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(orders => {
+                    const ordersList = document.getElementById('ordersList');
+                    ordersList.innerHTML = ''; // Clear existing orders
+
+                    if (orders.length === 0) {
+                        ordersList.innerHTML = '<p>No orders found.</p>';
+                        return;
+                    }
+
+                    // Sort orders by date (newest first)
+                    orders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+
+                    orders.forEach(order => {
+                        const orderCard = `
+                            <div class="order-card ${order.paymentStatus === 'Paid' ? 'paid' : ''}">
+                                <h3>Order ID: ${order.id}</h3>
+                                <p><strong>Date:</strong> ${order.orderDate}</p>
+                                <p><strong>Type:</strong> ${order.type || 'Regular'}</p>
+                                <p><strong>Flavor:</strong> ${order.flavor || 'N/A'}</p>
+                                <p><strong>Shape:</strong> ${order.shape || 'N/A'}</p>
+                                <p><strong>Toppings:</strong> ${order.toppings || 'None'}</p>
+                                <p><strong>Message:</strong> ${order.message || 'N/A'}</p>
+                                <p><strong>Total Amount:</strong> Rs.${order.totalAmount || 2000}</p>
+                                <p><strong>Status:</strong> <span class="status ${order.paymentStatus.toLowerCase()}">${order.paymentStatus}</span></p>
+                                ${order.paymentStatus === 'Pending' ? `
+                                    <div class="payment-section">
+                                        <input type="number" id="amount-${order.id}" placeholder="Enter amount" required min="1000" step="100" value="${order.totalAmount || 2000}">
+                                        <button onclick="processPayment('${order.id}')">Pay Now</button>
+                                    </div>
+                                ` : ''}
+                                ${order.paymentStatus === 'Paid' ? `
+                                    <div class="payment-info">
+                                        <p><strong>Paid Amount:</strong> Rs.${order.paymentAmount}</p>
+                                        <p><strong>Payment Date:</strong> ${order.paymentDate}</p>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                        ordersList.innerHTML += orderCard;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('ordersList').innerHTML = 
+                        '<p>Error loading orders. Please try again later.</p>';
+                });
+        }
+
+        function processPayment(orderId) {
+            const amountInput = document.getElementById(`amount-${orderId}`);
+            const amount = parseFloat(amountInput.value);
+
+            if (!amount || amount < 1000) {
+                alert('Please enter a valid amount (minimum Rs.1000)');
+                return;
+            }
+
+            const payment = {
+                orderId: orderId,
+                amount: amount
+            };
+
+            fetch('http://localhost:8080/api/payments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payment)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Payment failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Payment processed successfully!');
+                loadOrders(); // Reload orders to show updated status
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error processing payment. Please try again.');
+            });
+        }
+    </script>
+</body>
+</html> 
