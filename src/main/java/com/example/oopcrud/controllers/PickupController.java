@@ -146,4 +146,10 @@ public class PickupController {
         }
     }
 
+    @RequestMapping("/")
+    public String showPickupListPage() {
+        return "pickup-details";  // returns pickup-details.jsp
+    }
+
+
 }

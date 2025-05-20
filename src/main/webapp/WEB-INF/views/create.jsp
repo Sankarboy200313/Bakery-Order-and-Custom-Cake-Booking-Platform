@@ -54,9 +54,17 @@
                 class="w-full bg-brown hover:bg-brown-dark text-white font-semibold py-3 rounded-xl transition duration-200">
             Create Pickup
         </button>
-    </form>
 
+    </form>
     <div id="message" class="mt-6 text-center text-sm font-medium"></div>
+
+    <!-- View Pickup Details Button -->
+    <div class="mt-4 text-center">
+        <a href="/"
+           class="inline-block bg-gray-200 hover:bg-gray-300 text-brown-dark font-semibold px-6 py-3 rounded-xl transition duration-200">
+            View Pickup Details
+        </a>
+    </div>
 </div>
 
 <script>
