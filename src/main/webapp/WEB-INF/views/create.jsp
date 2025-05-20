@@ -138,7 +138,7 @@
 
 <style>
     .bg-cream-light {
-        background-color: #fdf6e3;
+        background-color: #fdf6e4;
     }
 
     .bg-cream {

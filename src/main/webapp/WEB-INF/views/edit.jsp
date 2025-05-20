@@ -99,7 +99,7 @@
             });
         }
 
-        // Real-time validation setup
+
         validateField("pickupPersonName", /^[A-Za-z\s]+$/, "❌ Name should only contain letters");
         validateField("pickupLocation", /^[A-Za-z\s,]+$/, "❌ Location should not contain numbers or symbols");
         validateField("contactNumber", /^[0-9]{10}$/, "❌ Enter exactly 10 digits");

@@ -1,12 +1,3 @@
-id: bc3bc73d-2d1d-4a14-9614-5e78236fb689
-personName: nimesh
-location: badulla
-date: 2025-05-19 18:06:00
-status: Pending
-contactNumber: 0767647621
-email: nameshrajawansha@gmail.com
-createdAt: 2025-05-18 18:06:45
-
 id: 3aa8ad84-f35c-4a16-8807-db44508ab245
 personName: imalsha3213
 location: badulla
