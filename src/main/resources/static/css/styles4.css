@@ -18,6 +18,14 @@
     border-radius: 5px;
     cursor: pointer;
 }
+.update-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 .home-btn{
     background-color: #3498db;
     color: white;
@@ -25,5 +33,9 @@
 
 .cancel-btn {
     background-color: #e67e22;
+    color: white;
+}
+.update-btn {
+    background-color: #2d9304;
     color: white;
 }
