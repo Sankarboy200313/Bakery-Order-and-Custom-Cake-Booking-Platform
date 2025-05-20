@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bakery Admin Platform</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+    <div class="logosec">
+        <div class="logo">Bakers</div>
+        <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
+             class="icn menuicn" id="menuicn" alt="menu-icon" />
+    </div>
+    <div class="searchbar">
+        <input type="text" placeholder="Search" />
+        <div class="searchbtn">
+            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180758/Untitled-design-(28).png"
+                 class="icn srchicn" alt="search-icon" />
+        </div>
+    </div>
+    <div class="message">
+        <div class="circle"></div>
+        <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png" class="icn" alt="" />
+        <div class="dp">
+            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
+                 class="dpicn" alt="dp" />
+        </div>
+    </div>
+</header>
+<div class="main-container">
+    <div class="navcontainer">
+        <nav class="nav">
+            <div class="nav-upper-options">
+                <div class="nav-option option1">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2718/2718224.png" class="nav-img" alt="bread" />
+                    <a href="/"> <h3>Dashboard</h3></a>
+                </div>
+                <div class="nav-option option2">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1046/1046794.png" class="nav-img" alt="cupcake" />
+                    <a href="/orders-page"> <h3>Orders & Report</h3></a>
+                </div>
+                <div class="nav-option option3">
+                    <img src="https://cdn-icons-png.flaticon.com/512/706/706164.png" class="nav-img" alt="chef-hat" />
+                    <a href="/users"> <h3>Users</h3></a>
+                </div>
+                <div class="nav-option option4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/607/607839.png" class="nav-img" alt="rolling-pin" />
+                    <a href="/store"> <h3>Store Details</h3></a>
+                </div>
+                <div class="nav-option logout">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2795/2795778.png" class="nav-img" alt="oven-mitt" />
+                    <h3>Logout</h3>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="main">
+        <div class="searchbar2">
+            <input type="text" placeholder="Search" />
+            <div class="searchbtn">
+                <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180758/Untitled-design-(28).png"
+                     class="icn srchicn" alt="search-button" />
+            </div>
+        </div>
+        <div class="box-container">
+            <div class="box box1">
+                <div class="text">
+                    <h2 class="topic-heading" id="userCount">-</h2>
+                    <h2 class="topic">Log-in Users</h2>
+                </div>
+                <img src="https://cdn-icons-png.flaticon.com/512/1046/1046796.png" alt="doughnut" />
+            </div>
+            <div class="box box2">
+                <div class="text">
+                    <h2 class="topic-heading" id="orderCount">-</h2>
+                    <h2 class="topic">Orders</h2>
+                </div>
+                <img src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" alt="cookie" />
+            </div>
+            <div class="box box3">
+                <div class="text">
+                    <h2 class="topic-heading" id="commentCount">-</h2>
+                    <h2 class="topic">Comments</h2>
+                </div>
+                <img src="https://cdn-icons-png.flaticon.com/512/1046/1046771.png" alt="muffin" />
+            </div>
+            <div class="box box4">
+                <div class="text">
+                    <h2 class="topic-heading" id="income">-</h2>
+                    <h2 class="topic">Income</h2>
+                </div>
+                <img src="https://cdn-icons-png.flaticon.com/512/1046/1046857.png" alt="cake-slice" />
+            </div>
+        </div>
+        <div class="report-item full-width">
+            <h3 class="table-title">Recent Orders</h3>
+            <table class="order-table" id="orderTable">
+                <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Data will be populated dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get all dashboard data including orders
+        fetch('/api/dashboard')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Update summary statistics
+                document.getElementById('userCount').textContent = data.loginUsers;
+                document.getElementById('orderCount').textContent = data.orders;
+                document.getElementById('commentCount').textContent = data.comments;
+                document.getElementById('income').textContent = data.income;
+                
+                // Update orders table with data from orders.txt
+                const tbody = document.querySelector("#orderTable tbody");
+                tbody.innerHTML = '';
+                data.recentOrders.forEach(order => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${order.orderId}</td>
+                            <td>${order.customer}</td>
+                            <td>${order.date}</td>
+                            <td>$${order.total.toFixed(2)}</td>
+                            <td><span class="status ${order.status.toLowerCase()}">${order.status}</span></td>
+                        </tr>`;
+                });
+            })
+            .catch(error => {
+                console.error('Error loading dashboard data:', error);
+                alert('Failed to load dashboard data. Please check the console for details.');
+            });
+    });
+</script>
+</body>
+</html>

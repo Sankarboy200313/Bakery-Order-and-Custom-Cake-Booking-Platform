@@ -1,0 +1,3 @@
+B001,Classic Bread,350,bakery
+B002,Butter Croissant,220,bakery
+C001,Chocolate Cake,750,cake

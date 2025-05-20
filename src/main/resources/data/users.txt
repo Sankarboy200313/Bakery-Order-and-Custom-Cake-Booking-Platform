@@ -1,0 +1,5 @@
+admin,admin123,Admin,admin@bakery.com
+john,pass123,John Smith,john@example.com
+robert,pass789,Robert Brown,robert@example.com
+sarah,pass321,Sarah Wilson,sarah@example.com
+Shalini,pass123,donmri,shalin@example.com
