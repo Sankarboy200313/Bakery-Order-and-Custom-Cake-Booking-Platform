@@ -47,7 +47,7 @@
                             <div class="stars">${'★'.repeat(product.rating)}${'☆'.repeat(5-product.rating)}</div>
                             <div class="price">Rs.${product.price}</div>
                             <button onclick="addToCart('${product.id}')">Add</button>
-                            <input type="number" min="1" value="1" placeholder="Qty" class="quantity-box" />
+                            <input type="number" min="0" placeholder="Qty" class="quantity-box" />
                         </div>
                     `;
                     productList.innerHTML += productCard;
