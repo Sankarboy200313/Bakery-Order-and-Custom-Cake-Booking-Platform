@@ -1,26 +1,34 @@
 [
     {
-        "id": "1",
-        "name": "Chocolate Cake",
-        "description": "Rich chocolate cake with chocolate ganache",
-        "price": 3500,
+        "id": "egg-puff",
+        "name": "EGG PUFF",
+        "description": "Crispy puff pastry filled with spiced boiled egg mix.",
+        "imageUrl": "Egg-Puff-Pastry-Bundle-Featured-Image-.jpg",
         "rating": 5,
-        "imageUrl": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=300"
+        "price": 120
     },
     {
-        "id": "2",
-        "name": "Vanilla Cake",
-        "description": "Classic vanilla cake with buttercream frosting",
-        "price": 3000,
+        "id": "chicken-sandwich",
+        "name": "CHICKEN SANDWICH",
+        "description": "Grilled chicken, lettuce, and mayo in soft bread.",
+        "imageUrl": "merlin_189026502_58171dd4-b0bc-47c3-aa6a-d910a3f1de4c-mediumSquareAt3X.jpg",
         "rating": 4,
-        "imageUrl": "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?auto=format&fit=crop&w=300"
+        "price": 200
     },
     {
-        "id": "3",
-        "name": "Red Velvet",
-        "description": "Elegant red velvet cake with cream cheese frosting",
-        "price": 4000,
+        "id": "chocolate-donut",
+        "name": "CHOCOLATE DONUT",
+        "description": "Rich chocolate glazed donut with sprinkles.",
+        "imageUrl": "chocolate-donuts-featured.jpg",
         "rating": 5,
-        "imageUrl": "https://images.unsplash.com/photo-1586788680434-30d324b2d46f?auto=format&fit=crop&w=300"
+        "price": 160
+    },
+    {
+        "id": "veggie-bun",
+        "name": "VEGGIE BUN",
+        "description": "Soft bun stuffed with mildly spiced vegetables.",
+        "imageUrl": "Griled-buns-768x1024.jpg",
+        "rating": 4,
+        "price": 100
     }
 ] 

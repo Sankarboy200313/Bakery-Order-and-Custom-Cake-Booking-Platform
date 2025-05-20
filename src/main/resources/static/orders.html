@@ -32,7 +32,7 @@
         document.addEventListener('DOMContentLoaded', loadOrders);
 
         function loadOrders() {
-            fetch('http://localhost:8080/api/orders')
+            fetch('http://localhost:8080/api/custom-cakes/summary')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -40,11 +40,14 @@
                     return response.json();
                 })
                 .then(orders => {
+                    if (!Array.isArray(orders)) {
+                        throw new Error('Invalid data format received from server');
+                    }
                     const ordersList = document.getElementById('ordersList');
-                    ordersList.innerHTML = ''; // Clear existing orders
+                    ordersList.innerHTML = '';
 
                     if (orders.length === 0) {
-                        ordersList.innerHTML = '<p>No orders found.</p>';
+                        ordersList.innerHTML = '<p>No custom cake orders found.</p>';
                         return;
                     }
 
@@ -53,28 +56,13 @@
 
                     orders.forEach(order => {
                         const orderCard = `
-                            <div class="order-card ${order.paymentStatus === 'Paid' ? 'paid' : ''}">
+                            <div class="order-card">
                                 <h3>Order ID: ${order.id}</h3>
                                 <p><strong>Date:</strong> ${order.orderDate}</p>
-                                <p><strong>Type:</strong> ${order.type || 'Regular'}</p>
                                 <p><strong>Flavor:</strong> ${order.flavor || 'N/A'}</p>
                                 <p><strong>Shape:</strong> ${order.shape || 'N/A'}</p>
                                 <p><strong>Toppings:</strong> ${order.toppings || 'None'}</p>
                                 <p><strong>Message:</strong> ${order.message || 'N/A'}</p>
-                                <p><strong>Total Amount:</strong> Rs.${order.totalAmount || 2000}</p>
-                                <p><strong>Status:</strong> <span class="status ${order.paymentStatus.toLowerCase()}">${order.paymentStatus}</span></p>
-                                ${order.paymentStatus === 'Pending' ? `
-                                    <div class="payment-section">
-                                        <input type="number" id="amount-${order.id}" placeholder="Enter amount" required min="1000" step="100" value="${order.totalAmount || 2000}">
-                                        <button onclick="processPayment('${order.id}')">Pay Now</button>
-                                    </div>
-                                ` : ''}
-                                ${order.paymentStatus === 'Paid' ? `
-                                    <div class="payment-info">
-                                        <p><strong>Paid Amount:</strong> Rs.${order.paymentAmount}</p>
-                                        <p><strong>Payment Date:</strong> ${order.paymentDate}</p>
-                                    </div>
-                                ` : ''}
                             </div>
                         `;
                         ordersList.innerHTML += orderCard;
@@ -83,7 +71,7 @@
                 .catch(error => {
                     console.error('Error:', error);
                     document.getElementById('ordersList').innerHTML = 
-                        '<p>Error loading orders. Please try again later.</p>';
+                        `<p style='color: #ffb3b3;'>Error loading custom cake orders: ${error.message}. Please check your server and try again later.</p>`;
                 });
         }
 

@@ -64,4 +64,19 @@ public class CustomCakeController {
         }
         throw new RuntimeException("Custom cake not found");
     }
+
+    @GetMapping("/summary")
+    public List<Map<String, Object>> getCustomCakeOrdersSummary() {
+        List<Map<String, Object>> orders = FileStorage.readFromFile(
+            FileStorage.getOrdersFile(),
+            new com.fasterxml.jackson.core.type.TypeReference<List<Map<String, Object>>>() {}
+        );
+        List<Map<String, Object>> customOrders = new ArrayList<>();
+        for (Map<String, Object> order : orders) {
+            if ("custom".equals(order.get("type"))) {
+                customOrders.add(order);
+            }
+        }
+        return customOrders;
+    }
 } 

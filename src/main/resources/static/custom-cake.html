@@ -7,28 +7,18 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="background-overlay"></div>
-
-    <header>
-        <h1>SLIIT Bakery</h1>
-        <nav>
-            <ul>
-                <li onclick="window.location.href='index.html'">Products</li>
-                <li class="active">Custom Cake</li>
-                <li onclick="window.location.href='orders.html'">Orders</li>
-            </ul>
-        </nav>
-    </header>
+    <!-- Decorative Cake Background Image -->
+    <div class="cake-background"></div>
 
     <div class="container">
-        <h2>Order Your Custom Cake</h2>
-        <form id="cakeForm" onsubmit="submitOrder(event)">
+        <h1>Order Your Custom Cake</h1>
+        <form id="cakeForm" method="post" action="">
             <label for="flavor">Choose Cake Flavor:</label>
             <select id="flavor" required onchange="updatePrice()">
                 <option value="">Select</option>
-                <option value="Vanilla">Vanilla - Rs.2000</option>
-                <option value="Chocolate">Chocolate - Rs.2000</option>
-                <option value="Strawberry">Strawberry - Rs.2000</option>
+                <option value="Vanilla">Vanilla</option>
+                <option value="Chocolate">Chocolate</option>
+                <option value="Strawberry">Strawberry</option>
             </select>
 
             <label for="shape">Choose Cake Shape:</label>
@@ -42,73 +32,83 @@
             <fieldset>
                 <legend>Select Toppings:</legend>
                 <div class="topping-option">
-                    <input type="checkbox" id="cherry" name="toppings" value="Cherry" data-price="250" onchange="updatePrice()">
-                    <label for="cherry">Cherry (+Rs.250)</label>
+                    <input type="checkbox" id="cherry" name="toppings" value="Cherry" onchange="updatePrice()">
+                    <label for="cherry">Cherry (+Rs.300)</label>
                 </div>
                 <div class="topping-option">
-                    <input type="checkbox" id="nuts" name="toppings" value="Nuts" data-price="300" onchange="updatePrice()">
-                    <label for="nuts">Nuts (+Rs.300)</label>
+                    <input type="checkbox" id="nuts" name="toppings" value="Nuts" onchange="updatePrice()">
+                    <label for="nuts">Nuts (+Rs.150)</label>
                 </div>
                 <div class="topping-option">
-                    <input type="checkbox" id="cashews" name="toppings" value="Cashews" data-price="350" onchange="updatePrice()">
+                    <input type="checkbox" id="cashews" name="toppings" value="Cashews" onchange="updatePrice()">
                     <label for="cashews">Cashews (+Rs.350)</label>
                 </div>
             </fieldset>
 
-            <div id="priceDisplay" class="price-display">
-                <p>Base Price: Rs.2000</p>
-                <p>Toppings: Rs.<span id="toppingsPrice">0</span></p>
-                <p><strong>Total Price: Rs.<span id="totalPrice">2000</span></strong></p>
+            <div id="priceDisplay" style="margin: 15px 0; font-weight: bold; color: #3E2723; background: #fffbe7; border-radius: 8px; padding: 10px;">
+                Total Price: Rs.<span id="totalPrice">2000</span>
             </div>
 
             <label for="message">Enter Custom Message:</label>
             <input type="text" id="message" placeholder="Happy Birthday!" required>
 
+            <!-- Buttons Section -->
             <button type="submit">Place Order</button>
+            <button type="button" onclick="exitApp()">Exit</button>
         </form>
     </div>
 
+    <div class="cake-background-left"></div>
+    <div class="cake-background"></div>
+
+    <!-- JS to handle form submission -->
     <script>
-        function calculatePrice() {
+        function exitApp() {
+            alert("Exiting the application...");
+            window.location.href = "https://www.google.com";
+        }
+
+        function calculateTotal() {
             const basePrice = 2000;
-            let totalPrice = basePrice;
-            
-            // Add toppings prices
-            const selectedToppings = document.querySelectorAll('input[name="toppings"]:checked');
-            let toppingsPrice = 0;
-            selectedToppings.forEach(topping => {
-                toppingsPrice += parseInt(topping.dataset.price);
+            let total = basePrice;
+            const toppingCheckboxes = document.querySelectorAll('input[name="toppings"]:checked');
+            toppingCheckboxes.forEach(cb => {
+                if (cb.value === 'Cherry') total += 300;
+                if (cb.value === 'Nuts') total += 150;
+                if (cb.value === 'Cashews') total += 350;
             });
-            
-            totalPrice += toppingsPrice;
-            return { totalPrice, toppingsPrice };
+            return total;
         }
 
         function updatePrice() {
-            const { totalPrice, toppingsPrice } = calculatePrice();
-            document.getElementById('toppingsPrice').textContent = toppingsPrice;
-            document.getElementById('totalPrice').textContent = totalPrice;
+            const total = calculateTotal();
+            document.getElementById('totalPrice').textContent = total;
         }
 
-        function submitOrder(event) {
-            event.preventDefault();
+        // Initialize price display
+        updatePrice();
+
+        document.getElementById('cakeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
 
             const flavor = document.getElementById('flavor').value;
             const shape = document.getElementById('shape').value;
             const message = document.getElementById('message').value;
             const toppingCheckboxes = document.querySelectorAll('input[name="toppings"]:checked');
-            const toppings = Array.from(toppingCheckboxes).map(cb => cb.value);
-            const { totalPrice } = calculatePrice();
+            const toppings = Array.from(toppingCheckboxes).map(cb => cb.value).join(', ');
 
+            const totalAmount = calculateTotal();
+
+            // Create the order object
             const order = {
                 flavor: flavor,
                 shape: shape,
-                toppings: toppings.length > 0 ? toppings.join(', ') : 'None',
+                toppings: toppings,
                 message: message,
-                totalAmount: totalPrice
+                totalAmount: totalAmount
             };
 
-            // Send order to backend
+            // Send the order to the backend
             fetch('http://localhost:8080/api/custom-cakes', {
                 method: 'POST',
                 headers: {
@@ -118,25 +118,28 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Redirect to summary page with order details
+                // Get selected products from localStorage
+                let selectedProducts = [];
+                try {
+                    selectedProducts = JSON.parse(localStorage.getItem('selectedProducts')) || [];
+                } catch (e) { selectedProducts = []; }
+                // Redirect to summary page with all order details and selected products in the URL
                 const orderDetails = encodeURIComponent(JSON.stringify({
                     id: data.id,
                     flavor: data.flavor,
                     shape: data.shape,
                     toppings: data.toppings,
                     message: data.message,
-                    totalAmount: data.totalAmount
+                    totalAmount: data.totalAmount,
+                    products: selectedProducts
                 }));
                 window.location.href = `summary.html?order=${orderDetails}`;
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error placing order. Please try again.');
+                alert('There was an error placing your order. Please try again.');
             });
-        }
-
-        // Initialize price display
-        updatePrice();
+        });
     </script>
 </body>
 </html> 

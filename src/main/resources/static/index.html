@@ -24,6 +24,14 @@
         <!-- Products will be loaded here dynamically -->
     </main>
 
+    <div class="custom-order-section">
+        <a href="custom-cake.html" class="custom-order-button" onclick="saveProductSelections()">Custom Cake Order</a>
+    </div>
+
+    <footer>
+        <p>Designed by PG - 117 © 2025 SLIIT Bakery</p>
+    </footer>
+
     <script>
         // Load products from JSON file
         fetch('http://localhost:8080/api/products')
@@ -50,6 +58,22 @@
         function addToCart(productId) {
             // Implement cart functionality here
             alert('Product added to cart!');
+        }
+
+        // Save selected product quantities to localStorage
+        function saveProductSelections() {
+            const productCards = document.querySelectorAll('.product-card');
+            const selectedProducts = [];
+            productCards.forEach(card => {
+                const name = card.querySelector('h2').textContent.trim();
+                const price = parseInt(card.querySelector('.price').textContent.replace('Rs.', '').trim());
+                const qtyInput = card.querySelector('.quantity-box');
+                const quantity = parseInt(qtyInput.value);
+                if (quantity && quantity > 0) {
+                    selectedProducts.push({ name, price, quantity });
+                }
+            });
+            localStorage.setItem('selectedProducts', JSON.stringify(selectedProducts));
         }
     </script>
 </body>
