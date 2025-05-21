@@ -3,6 +3,46 @@
 <head>
     <title>Bakery Admin Platform</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+        .sortable:hover {
+            background-color: #f0f0f0;
+        }
+        .sortable::after {
+            content: " ⇵";
+            font-size: 12px;
+            color: #999;
+        }
+        .sortable.asc::after {
+            content: " ↑";
+            color: #333;
+        }
+        .sortable.desc::after {
+            content: " ↓";
+            color: #333;
+        }
+        .status {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .processing {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .pending {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -94,14 +134,23 @@
         </div>
         <div class="report-item full-width">
             <h3 class="table-title">Recent Orders</h3>
+            <div style="margin-bottom: 10px">
+                <label for="sortOrder">Sort by: </label>
+                <select id="sortOrder" onchange="sortOrders()">
+                    <option value="dateDesc">Date (Newest First)</option>
+                    <option value="dateAsc">Date (Oldest First)</option>
+                    <option value="totalDesc">Total (High to Low)</option>
+                    <option value="totalAsc">Total (Low to High)</option>
+                </select>
+            </div>
             <table class="order-table" id="orderTable">
                 <thead>
                 <tr>
-                    <th>Order ID</th>
-                    <th>Customer</th>
-                    <th>Date</th>
-                    <th>Total</th>
-                    <th>Status</th>
+                    <th class="sortable" data-sort="orderId">Order ID</th>
+                    <th class="sortable" data-sort="customer">Customer</th>
+                    <th class="sortable" data-sort="date">Date</th>
+                    <th class="sortable" data-sort="total">Total</th>
+                    <th class="sortable" data-sort="status">Status</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -113,6 +162,10 @@
 </div>
 <script src="/script/script.js"></script>
 <script>
+    let orders = []; // Global variable to store orders
+    let currentSortField = 'date';
+    let currentSortDirection = 'desc';
+
     document.addEventListener("DOMContentLoaded", function() {
         // Get all dashboard data including orders
         fetch('/api/dashboard')
@@ -129,18 +182,19 @@
                 document.getElementById('commentCount').textContent = data.comments;
                 document.getElementById('income').textContent = data.income;
                 
-                // Update orders table with data from orders.txt
-                const tbody = document.querySelector("#orderTable tbody");
-                tbody.innerHTML = '';
-                data.recentOrders.forEach(order => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${order.orderId}</td>
-                            <td>${order.customer}</td>
-                            <td>${order.date}</td>
-                            <td>$${order.total.toFixed(2)}</td>
-                            <td><span class="status ${order.status.toLowerCase()}">${order.status}</span></td>
-                        </tr>`;
+                // Store orders in global variable
+                orders = data.recentOrders;
+                
+                // Display orders sorted by default (date desc)
+                sortAndDisplayOrders('date', 'desc');
+                
+                // Add click event listeners to sortable headers
+                document.querySelectorAll('th.sortable').forEach(th => {
+                    th.addEventListener('click', () => {
+                        const field = th.getAttribute('data-sort');
+                        const direction = currentSortField === field && currentSortDirection === 'asc' ? 'desc' : 'asc';
+                        sortAndDisplayOrders(field, direction);
+                    });
                 });
             })
             .catch(error => {
@@ -148,6 +202,79 @@
                 alert('Failed to load dashboard data. Please check the console for details.');
             });
     });
+    
+    function sortAndDisplayOrders(field, direction) {
+        // Update current sort state
+        currentSortField = field;
+        currentSortDirection = direction;
+        
+        // Update sort indicators on column headers
+        document.querySelectorAll('th.sortable').forEach(th => {
+            th.classList.remove('asc', 'desc');
+            if (th.getAttribute('data-sort') === field) {
+                th.classList.add(direction);
+            }
+        });
+        
+        // Sort the orders array
+        orders.sort((a, b) => {
+            let comparison = 0;
+            
+            // Handle different field types
+            if (field === 'orderId') {
+                comparison = a.orderId - b.orderId;
+            } else if (field === 'customer') {
+                comparison = a.customer.localeCompare(b.customer);
+            } else if (field === 'date') {
+                comparison = new Date(a.date) - new Date(b.date);
+            } else if (field === 'total') {
+                comparison = a.total - b.total;
+            } else if (field === 'status') {
+                comparison = a.status.localeCompare(b.status);
+            }
+            
+            // Reverse if descending
+            return direction === 'desc' ? -comparison : comparison;
+        });
+        
+        // Display sorted orders
+        displayOrders();
+    }
+    
+    function displayOrders() {
+        const tbody = document.querySelector("#orderTable tbody");
+        tbody.innerHTML = '';
+        
+        orders.forEach(order => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${order.orderId}</td>
+                    <td>${order.customer}</td>
+                    <td>${order.date}</td>
+                    <td>$${order.total.toFixed(2)}</td>
+                    <td><span class="status ${order.status.toLowerCase()}">${order.status}</span></td>
+                </tr>`;
+        });
+    }
+    
+    function sortOrders() {
+        const sortValue = document.getElementById('sortOrder').value;
+        
+        switch(sortValue) {
+            case 'dateDesc':
+                sortAndDisplayOrders('date', 'desc');
+                break;
+            case 'dateAsc':
+                sortAndDisplayOrders('date', 'asc');
+                break;
+            case 'totalDesc':
+                sortAndDisplayOrders('total', 'desc');
+                break;
+            case 'totalAsc':
+                sortAndDisplayOrders('total', 'asc');
+                break;
+        }
+    }
 </script>
 </body>
 </html>
