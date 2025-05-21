@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<nav>
+    <input type="checkbox" id="res-menu">
+    <label for="res-menu">
+        <i class="fas fa-bars" id="s1"></i>
+        <i class="fas fa-times" id="s2"></i>
+    </label>
+    <h2>Your Online</h2>
+    <h1>Bakery Store</h1>
+    <ul>
+        <li><a th:href="@{/dashboard}">Home</a></li>
+        <li><a th:href="@{/order}">Order</a></li>
+        <li><a th:href="@{/chart}">Chart</a></li>
+        <li><a th:href="@{/aboutUs}">About Us</a></li>
+        <li><a th:href="@{/service}">Services</a></li>
+        <li th:if="${!isLoggedIn}" class="nav-button"><a href="/login">Login</a></li>
+        <li th:if="${isLoggedIn}" class="nav-button"><a href="/profile">Profile</a></li>
+    </ul>
+</nav>
+<hr>
+<section class="services">
+    <h2>Our Services</h2>
+    <div class="service-container">
+        <div class="service-box">
+            <img src="Image/chocolate-cake..jpg" alt="Custom Cakes">
+            <h3>Custom Cakes</h3>
+            <p>Order personalized cakes for birthdays, weddings, and special events.</p>
+        </div>
+        <div class="service-box">
+            <img src="/Image/pastries-display.jpg" alt="Freshly Baked Goods">
+            <h3>Freshly Baked Goods</h3>
+            <p>Enjoy a variety of fresh bread, pastries, and cookies every day.</p>
+        </div>
+        <div class="service-box">
+            <img src="/Image/mobile-ordering.jpg" alt="Online Ordering">
+            <h3>Online Ordering</h3>
+            <p>Place your order online and get doorstep delivery or easy pickup.</p>
+        </div>
+        <div class="service-box">
+            <img src="/Image/buffet-table.jpg" alt="Catering Services">
+            <h3>Catering Services</h3>
+            <p>We provide bakery catering for corporate events, parties, and celebrations.</p>
+        </div>
+    </div>
+</section>
+</body>
+</html>
