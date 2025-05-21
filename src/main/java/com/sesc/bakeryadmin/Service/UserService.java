@@ -10,11 +10,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService {
-    private static final String FILE_PATH = "users.txt";
+    private static final String USERS_FILE_PATH = "src/main/resources/data/users.txt";
 
     public List<User> readUsers() {
+        return readFromFile(USERS_FILE_PATH);
+    }
+
+    private List<User> readFromFile(String filePath) {
         List<User> users = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
@@ -23,15 +27,21 @@ public class UserService {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            // Create file if it doesn't exist
+            try {
+                new File(filePath).createNewFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
         return users;
     }
 
-    public void writeUsers(List<User> users) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
+    private void writeToFile(List<User> users, String filePath) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
             for (User u : users) {
-                bw.write(String.format("%s,%s,%s,%s%n", u.getUsername(), u.getPassword(), u.getFullName(), u.getEmail()));
+                bw.write(String.format("%s,%s,%s,%s%n", 
+                    u.getUsername(), u.getPassword(), u.getFullName(), u.getEmail()));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,21 +51,13 @@ public class UserService {
     public void addUser(User user) {
         List<User> users = readUsers();
         users.add(user);
-        writeUsers(users);
+        writeToFile(users, USERS_FILE_PATH);
     }
 
     public void deleteUser(String userId) {
         List<User> users = readUsers().stream()
                 .filter(u -> !u.getUsername().equals(userId))
                 .collect(Collectors.toList());
-        writeUsers(users);
+        writeToFile(users, USERS_FILE_PATH);
     }
-
-    public void updateAdmin(String userId, String username, String password) {
-        List<User> users = readUsers().stream()
-                .map(u -> u.getUsername().equals(userId) ? new User(username, password, u.getFullName(), u.getEmail()) : u)
-                .collect(Collectors.toList());
-        writeUsers(users);
-    }
-}
-
+} 

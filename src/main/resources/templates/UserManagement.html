@@ -53,6 +53,32 @@
         th {
             background-color: #f2f2f2;
         }
+        .delete-btn {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .edit-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        
+        .delete-btn:hover {
+            background-color: #ff0000;
+        }
+        
+        .edit-btn:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -85,23 +111,23 @@
             <div class="nav-upper-options">
                 <div class="nav-option option1">
                     <img src="https://cdn-icons-png.flaticon.com/512/2718/2718224.png" class="nav-img" alt="bread" />
-                    <a href="index.html"><h3>Dashboard</h3></a>
+                    <a href="/"><h3>Dashboard</h3></a>
                 </div>
                 <div class="nav-option option2">
                     <img src="https://cdn-icons-png.flaticon.com/512/1046/1046794.png" class="nav-img" alt="cupcake" />
-                    <a href="ordersandreport.html"><h3>Orders & Report</h3></a>
+                    <a href="/orders-page"><h3>Orders & Report</h3></a>
                 </div>
                 <div class="nav-option option3">
                     <img src="https://cdn-icons-png.flaticon.com/512/706/706164.png" class="nav-img" alt="chef-hat" />
-                    <a href="UserManagement.html"><h3>Users</h3></a>
+                    <a href="/users"><h3>Users</h3></a>
                 </div>
                 <div class="nav-option option4">
                     <img src="https://cdn-icons-png.flaticon.com/512/607/607839.png" class="nav-img" alt="rolling-pin" />
-                    <a href="Storedetails.html"><h3>Store Details</h3></a>
+                    <a href="/store"><h3>Store Details</h3></a>
                 </div>
                 <div class="nav-option logout">
                     <img src="https://cdn-icons-png.flaticon.com/512/2795/2795778.png" class="nav-img" alt="logout" />
-                    <h3>Logout</h3>
+                    <a href="/login"><h3>Logout</h3></a>
                 </div>
             </div>
         </nav>
@@ -127,32 +153,15 @@
     <button id="deleteUserBtn">Delete User</button>
 </div>
 
-<!-- Add Admin Section -->
-<form id="adminForm">
-    <h2>Add Admin</h2>
-    <input name="adminId" placeholder="Admin ID" required />
-    <input name="adminUsername" placeholder="Username" required />
-    <input name="adminPassword" placeholder="Password" required type="password"/>
-    <button type="submit">Add Admin</button>
-</form>
-
-<!-- Delete Admin -->
-<div class="section">
-    <h2>Delete Admin</h2>
-    <input id="deleteAdminId" placeholder="Admin ID to delete" />
-    <button id="deleteAdminBtn">Delete Admin</button>
-</div>
-
 <!-- Admin Table -->
 <div class="section">
     <h2>Admin List</h2>
     <table id="adminTable">
         <thead>
         <tr>
+            <th>Admin ID</th>
             <th>Username</th>
             <th>Password</th>
-            <th>Full Name</th>
-            <th>Email</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -162,98 +171,209 @@
     </table>
 </div>
 
+<!-- Add Admin Form -->
+<form id="adminForm">
+    <h2>Add Admin</h2>
+    <input name="adminId" placeholder="Admin ID" required />
+    <input name="username" placeholder="Username" required />
+    <input name="password" type="password" placeholder="Password" required />
+    <button type="submit">Add Admin</button>
+</form>
+
+<!-- Users Table -->
+<div class="section">
+    <h2>Users List</h2>
+    <table id="userTable">
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Full Name</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody id="userTableBody">
+        <!-- Populated by JavaScript -->
+        </tbody>
+    </table>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const userForm = document.getElementById('userForm');
         const adminForm = document.getElementById('adminForm');
+        const userTableBody = document.getElementById('userTableBody');
         const adminTableBody = document.getElementById('adminTableBody');
 
-        // Load admins
-        fetch('/users')
+        // Load users
+        fetch('/api/users')
             .then(res => res.json())
             .then(data => {
+                userTableBody.innerHTML = ''; // Clear existing rows
                 data.forEach(user => {
-                    if (user.fullName === 'Admin') {
+                    if (user.fullName !== 'Admin') { // Only show non-admin users
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                <td>${user.username}</td>
-                <td>${user.password}</td>
-                <td>${user.fullName}</td>
-                <td>${user.email}</td>
-                <td>
-                  <button onclick="editAdmin('${user.username}', '${user.username}', '${user.password}')">Edit</button>
-                </td>
-              `;
-                        adminTableBody.appendChild(row);
+                            <td>${user.username}</td>
+                            <td>${user.fullName}</td>
+                            <td>${user.email}</td>
+                            
+                        `;
+                        userTableBody.appendChild(row);
                     }
                 });
-            });
+            })
+            .catch(error => console.error('Error loading users:', error));
+
+        // Load admins
+        function loadAdmins() {
+            fetch('/api/admins')
+                .then(res => res.json())
+                .then(data => {
+                    adminTableBody.innerHTML = ''; // Clear existing rows
+                    data.forEach(admin => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${admin.adminId}</td>
+                            <td>${admin.username}</td>
+                            <td>${admin.password}</td>
+                            <td>
+                                <button onclick="editAdmin('${admin.adminId}', '${admin.username}', '${admin.password}')" class="edit-btn">Edit</button>
+                                <button onclick="deleteAdmin('${admin.adminId}')" class="delete-btn">Delete</button>
+                            </td>
+                        `;
+                        adminTableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading admins:', error);
+                    alert('Failed to load admin data');
+                });
+        }
+
+        // Load admins when page loads
+        loadAdmins();
 
         // Add User
         userForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const data = {
-                action: 'addUser',
-                userId: userForm.userId.value,
                 username: userForm.username.value,
                 fullName: userForm.fullName.value,
                 email: userForm.email.value
             };
 
-            fetch('/users', {
+            fetch('/api/users', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
-            }).then(() => location.reload());
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('User added successfully');
+                    userForm.reset();
+                    location.reload(); // Reload to update the table
+                } else {
+                    throw new Error('Failed to add user');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to add user');
+            });
         });
 
-        // Delete User
-        document.getElementById('deleteUserBtn').addEventListener('click', () => {
-            const userId = document.getElementById('deleteUserId').value;
-            fetch(`/users/${userId}`, {
-                method: 'DELETE'
-            }).then(() => location.reload());
-        });
+        // Delete User function
+        function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                fetch(`/api/users/${userId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('User deleted successfully');
+                        location.reload(); // Reload to update the table
+                    } else {
+                        throw new Error('Failed to delete user');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to delete user');
+                });
+            }
+        }
 
         // Add Admin
         adminForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const data = {
-                action: 'addAdmin',
                 adminId: adminForm.adminId.value,
-                username: adminForm.adminUsername.value,
-                password: adminForm.adminPassword.value
+                username: adminForm.username.value,
+                password: adminForm.password.value
             };
 
-            fetch('/admins', {
+            fetch('/api/admins', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
-            }).then(() => location.reload());
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to add admin');
+                alert('Admin added successfully');
+                adminForm.reset();
+                loadAdmins(); // Reload the table
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to add admin');
+            });
         });
 
-        // Delete Admin
-        document.getElementById('deleteAdminBtn').addEventListener('click', () => {
-            const adminId = document.getElementById('deleteAdminId').value;
-            fetch(`/admins/${adminId}`, {
-                method: 'DELETE'
-            }).then(() => location.reload());
-        });
-    });
+        // Edit Admin function
+        function editAdmin(adminId, currentUsername, currentPassword) {
+            const newUsername = prompt("Enter new username", currentUsername);
+            if (!newUsername) return;
 
-    // Edit Admin
-    function editAdmin(adminId, currentUsername, currentPassword) {
-        const newUsername = prompt("Enter new username", currentUsername);
-        const newPassword = prompt("Enter new password", currentPassword);
+            const newPassword = prompt("Enter new password", currentPassword);
+            if (!newPassword) return;
 
-        if (newUsername && newPassword) {
-            fetch(`/admins/${adminId}`, {
+            fetch(`/api/admins/${adminId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: newUsername, password: newPassword })
-            }).then(() => location.reload());
+                body: JSON.stringify({
+                    username: newUsername,
+                    password: newPassword
+                })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to update admin');
+                alert('Admin updated successfully');
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to update admin');
+            });
         }
-    }
+
+        // Delete Admin function
+        function deleteAdmin(adminId) {
+            if (!confirm(`Are you sure you want to delete admin with ID: ${adminId}?`)) return;
+
+            fetch(`/api/admins/${adminId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to delete admin');
+                alert('Admin deleted successfully');
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to delete admin');
+            });
+        }
+    });
 </script>
 
 </body>

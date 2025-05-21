@@ -3,3 +3,5 @@ john,pass123,John Smith,john@example.com
 robert,pass789,Robert Brown,robert@example.com
 sarah,pass321,Sarah Wilson,sarah@example.com
 Shalini,pass123,donmri,shalin@example.com
+it24101741,defaultPass,sibs asd,it24101741@my.sliit.lk
+it24101741,defaultPass,sibs asd,it24101741@my.sliit.lk
