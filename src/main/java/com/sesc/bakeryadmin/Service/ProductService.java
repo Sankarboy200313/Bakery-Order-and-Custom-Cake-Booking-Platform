@@ -39,13 +39,13 @@ public class ProductService {
     public void removeProduct(String name) {
         List<Product> updatedList = new ArrayList<>();
         for (Product p : getAllProducts()) {
-            if (!String.valueOf(p.getName()).equalsIgnoreCase(name)) { {
+            if (!String.valueOf(p.getName()).equalsIgnoreCase(name)) {{
                 updatedList.add(p);
             }
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(PRODUCT_PATH))) {
             for (Product p1 : updatedList) {
-                writer.write(p.getName() + "," + p.getQuantity());
+                writer.write(p1.getName() + "," + p1.getQuantity());
                 writer.newLine();
             }
         } catch (IOException e) {

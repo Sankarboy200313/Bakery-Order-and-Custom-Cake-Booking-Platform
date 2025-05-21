@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>User Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f7f7;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form, .section {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logosec">
+        <div class="logo">Bakers</div>
+        <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
+             class="icn menuicn" id="menuicn" alt="menu-icon" />
+    </div>
+    <div class="searchbar">
+        <input type="text" placeholder="Search" />
+        <div class="searchbtn">
+            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180758/Untitled-design-(28).png"
+                 class="icn srchicn" alt="search-icon" />
+        </div>
+    </div>
+    <div class="message">
+        <div class="circle"></div>
+        <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png" class="icn" alt="" />
+        <div class="dp">
+            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
+                 class="dpicn" alt="dp" />
+        </div>
+    </div>
+</header>
+
+<div class="main-container">
+    <div class="navcontainer">
+        <nav class="nav">
+            <div class="nav-upper-options">
+                <div class="nav-option option1">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2718/2718224.png" class="nav-img" alt="bread" />
+                    <a href="index.html"><h3>Dashboard</h3></a>
+                </div>
+                <div class="nav-option option2">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1046/1046794.png" class="nav-img" alt="cupcake" />
+                    <a href="ordersandreport.html"><h3>Orders & Report</h3></a>
+                </div>
+                <div class="nav-option option3">
+                    <img src="https://cdn-icons-png.flaticon.com/512/706/706164.png" class="nav-img" alt="chef-hat" />
+                    <a href="UserManagement.html"><h3>Users</h3></a>
+                </div>
+                <div class="nav-option option4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/607/607839.png" class="nav-img" alt="rolling-pin" />
+                    <a href="Storedetails.html"><h3>Store Details</h3></a>
+                </div>
+                <div class="nav-option logout">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2795/2795778.png" class="nav-img" alt="logout" />
+                    <h3>Logout</h3>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+<h1>Bakery User & Admin Management</h1>
+
+<!-- Add User Section -->
+<form id="userForm">
+    <h2>Add User</h2>
+    <input name="userId" placeholder="User ID" required />
+    <input name="username" placeholder="Username" required />
+    <input name="fullName" placeholder="Full Name" required />
+    <input name="email" placeholder="Email" type="email" required />
+    <button type="submit">Add User</button>
+</form>
+
+<!-- Delete User -->
+<div class="section">
+    <h2>Delete User</h2>
+    <input id="deleteUserId" placeholder="User ID to delete" />
+    <button id="deleteUserBtn">Delete User</button>
+</div>
+
+<!-- Add Admin Section -->
+<form id="adminForm">
+    <h2>Add Admin</h2>
+    <input name="adminId" placeholder="Admin ID" required />
+    <input name="adminUsername" placeholder="Username" required />
+    <input name="adminPassword" placeholder="Password" required type="password"/>
+    <button type="submit">Add Admin</button>
+</form>
+
+<!-- Delete Admin -->
+<div class="section">
+    <h2>Delete Admin</h2>
+    <input id="deleteAdminId" placeholder="Admin ID to delete" />
+    <button id="deleteAdminBtn">Delete Admin</button>
+</div>
+
+<!-- Admin Table -->
+<div class="section">
+    <h2>Admin List</h2>
+    <table id="adminTable">
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="adminTableBody">
+        <!-- Populated by JavaScript -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const userForm = document.getElementById('userForm');
+        const adminForm = document.getElementById('adminForm');
+        const adminTableBody = document.getElementById('adminTableBody');
+
+        // Load admins
+        fetch('/users')
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(user => {
+                    if (user.fullName === 'Admin') {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                <td>${user.username}</td>
+                <td>${user.password}</td>
+                <td>${user.fullName}</td>
+                <td>${user.email}</td>
+                <td>
+                  <button onclick="editAdmin('${user.username}', '${user.username}', '${user.password}')">Edit</button>
+                </td>
+              `;
+                        adminTableBody.appendChild(row);
+                    }
+                });
+            });
+
+        // Add User
+        userForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const data = {
+                action: 'addUser',
+                userId: userForm.userId.value,
+                username: userForm.username.value,
+                fullName: userForm.fullName.value,
+                email: userForm.email.value
+            };
+
+            fetch('/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(() => location.reload());
+        });
+
+        // Delete User
+        document.getElementById('deleteUserBtn').addEventListener('click', () => {
+            const userId = document.getElementById('deleteUserId').value;
+            fetch(`/users/${userId}`, {
+                method: 'DELETE'
+            }).then(() => location.reload());
+        });
+
+        // Add Admin
+        adminForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const data = {
+                action: 'addAdmin',
+                adminId: adminForm.adminId.value,
+                username: adminForm.adminUsername.value,
+                password: adminForm.adminPassword.value
+            };
+
+            fetch('/admins', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(() => location.reload());
+        });
+
+        // Delete Admin
+        document.getElementById('deleteAdminBtn').addEventListener('click', () => {
+            const adminId = document.getElementById('deleteAdminId').value;
+            fetch(`/admins/${adminId}`, {
+                method: 'DELETE'
+            }).then(() => location.reload());
+        });
+    });
+
+    // Edit Admin
+    function editAdmin(adminId, currentUsername, currentPassword) {
+        const newUsername = prompt("Enter new username", currentUsername);
+        const newPassword = prompt("Enter new password", currentPassword);
+
+        if (newUsername && newPassword) {
+            fetch(`/admins/${adminId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: newUsername, password: newPassword })
+            }).then(() => location.reload());
+        }
+    }
+</script>
+
+</body>
+</html>

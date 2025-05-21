@@ -1,0 +1,200 @@
+/* Enhanced Order.css Implementation */
+
+/* Refined Basic Elements */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #f7f7f7;
+    color: #333;
+}
+
+header {
+    background: linear-gradient(to right, #ff6f61, #ff9a8b);
+    padding: 12px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+
+/* Orders & Reports Page Specific Styles */
+.content h1 {
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 10px;
+    border-bottom: 3px solid #ff6f61;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+/* Enhanced Chart Containers */
+.chart-box, .chart-box1 {
+    width: 100%;
+    max-width: 800px;
+    height: 400px;
+    margin: 30px 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.chart-box:hover, .chart-box1:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Chart Title Styling */
+.recent-orders1 {
+    font-size: 24px;
+    color: #333;
+    margin-top: 40px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.recent-orders1:after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background-color: #ff6f61;
+}
+
+/* Error Messages for Charts */
+.error-message {
+    color: #d9534f;
+    text-align: center;
+    padding: 20px;
+    font-size: 16px;
+    background-color: #f9f2f2;
+    border-radius: 8px;
+    border-left: 4px solid #d9534f;
+}
+
+/* Data Filters Section */
+.chart-filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.chart-filter {
+    padding: 8px 15px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chart-filter:hover, .chart-filter.active {
+    background: #ff6f61;
+    color: white;
+    border-color: #ff6f61;
+}
+
+/* Order Details Table */
+.orders-table-container {
+    margin-top: 40px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+    overflow-x: auto;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.orders-table th {
+    background-color: #f7f7f7;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #ff6f61;
+}
+
+.orders-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.orders-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Order Status Badges */
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.status-completed {
+    background-color: #e6f7ed;
+    color: #28a745;
+}
+
+.status-pending {
+    background-color: #fff8e6;
+    color: #ffc107;
+}
+
+.status-canceled {
+    background-color: #feebee;
+    color: #dc3545;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .chart-box, .chart-box1 {
+        height: 300px;
+        padding: 15px;
+    }
+
+    .chart-filters {
+        justify-content: center;
+    }
+
+    .content h1 {
+        text-align: center;
+        display: block;
+    }
+
+    .recent-orders1:after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* Print-friendly styles */
+@media print {
+    header, .navcontainer, .searchbar2 {
+        display: none;
+    }
+
+    .main {
+        margin: 0;
+        padding: 0;
+    }
+
+    .chart-box, .chart-box1, .orders-table-container {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+}

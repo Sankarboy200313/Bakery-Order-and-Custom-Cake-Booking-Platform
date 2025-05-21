@@ -15,7 +15,7 @@ import java.util.Map;
 @RequestMapping("/api/products")
 @CrossOrigin
 public class ProductController {
-    private final String PRODUCT_PATH = "product.txt";
+    private final String PRODUCT_PATH = "src/main/resources/data/product.txt";
 
     @GetMapping
     public List<Map<String, String>> getAllProducts() throws IOException {

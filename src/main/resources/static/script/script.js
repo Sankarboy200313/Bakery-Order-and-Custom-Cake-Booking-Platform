@@ -1,5 +1,5 @@
 async function loadProducts() {
-    const res = await fetch('http://localhost:8080/api/products');
+    const res = await fetch('/api/products');
     const data = await res.json();
 
     ['bakery', 'cake'].forEach(category => {
@@ -30,7 +30,7 @@ async function addProduct(category) {
         return;
     }
 
-    await fetch('http://localhost:8080/api/products', {
+    await fetch('/api/products', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({id, name, price, category})
@@ -43,7 +43,7 @@ async function removeProduct(category) {
     const id = document.getElementById(`remove-${category}-product-id`).value.trim();
     if (!id) return alert("Please enter ID");
 
-    await fetch(`http://localhost:8080/api/products/${id}`, {
+    await fetch(`/api/products/${id}`, {
         method: 'DELETE'
     });
 

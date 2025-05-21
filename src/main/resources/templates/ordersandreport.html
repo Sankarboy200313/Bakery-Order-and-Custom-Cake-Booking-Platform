@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Bakers Orders and Reports</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/order.css" />
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+<header>
+    <div class="logosec">
+        <div class="logo">Bakers</div>
+        <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
+             class="icn menuicn" id="menuicn" alt="menu-icon" />
+    </div>
+
+    <div class="searchbar">
+        <input type="text" placeholder="Search" />
+        <div class="searchbtn">
+            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180758/Untitled-design-(28).png"
+                 class="icn srchicn" alt="search-icon" />
+        </div>
+    </div>
+
+    <div class="message">
+        <div class="circle"></div>
+        <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png" class="icn" alt="message-icon" />
+        <div class="dp">
+            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
+                 class="dpicn" alt="profile-pic" />
+        </div>
+    </div>
+</header>
+
+<!-- Sidebar and Main Container -->
+<div class="main-container">
+    <!-- Navigation Sidebar -->
+    <div class="navcontainer">
+        <nav class="nav">
+            <div class="nav-upper-options">
+                <div class="nav-option option1">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2718/2718224.png" class="nav-img" alt="bread" />
+                    <a href="/"><h3>Dashboard</h3></a>
+                </div>
+
+                <div class="nav-option option2">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1046/1046794.png" class="nav-img" alt="cupcake" />
+                    <a href="/orders-page"><h3>Orders & Report</h3></a>
+                </div>
+
+                <div class="nav-option option3">
+                    <img src="https://cdn-icons-png.flaticon.com/512/706/706164.png" class="nav-img" alt="chef-hat" />
+                    <a href="/users"><h3>Users</h3></a>
+                </div>
+
+                <div class="nav-option option4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/607/607839.png" class="nav-img" alt="rolling-pin" />
+                    <a href="/store"><h3>Store Details</h3></a>
+                </div>
+
+                <div class="nav-option logout">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2795/2795778.png" class="nav-img" alt="logout" />
+                    <h3>Logout</h3>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main">
+        <div class="searchbar2">
+            <input type="text" placeholder="Search" />
+            <div class="searchbtn">
+                <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180758/Untitled-design-(28).png"
+                     class="icn srchicn" alt="search-icon" />
+            </div>
+        </div>
+
+        <div class="content">
+            <h1>Orders and Reports</h1>
+            <p>This page provides an overview of cake orders and revenue trends.</p>
+
+            <!-- Orders Bar Chart -->
+            <div id="orderChart" class="chart-box"></div>
+
+            <!-- Revenue Line Chart -->
+            <div class="report-container">
+                <h1 class="recent-orders1">Revenue</h1>
+                <div id="revenueChart" class="chart-box1"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to load data and render charts -->
+<script src="/script/scriptorder.js"></script>
+</body>
+</html>
