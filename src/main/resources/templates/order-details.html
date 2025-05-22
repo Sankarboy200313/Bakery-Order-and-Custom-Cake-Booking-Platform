@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #5e4126;
+            margin: 0;
+            padding: 0;
+        }
+
+        .edit-form-popup {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgb(94, 65, 38);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+         {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: min(90%, 700px);
+        }
+
+         {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #ffffff;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 50%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ffffff;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        {
+            grid-column: 1 / 3;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: flex-start;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .save-btn, .cancel-edit-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .save-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .cancel-edit-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background-color: #218838;
+        }
+
+        .cancel-edit-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+    <title>Order Details</title>
+
+    <link rel="stylesheet" th:href="@{/css/styles2.css}">
+    <link rel="stylesheet" th:href="@{/css/styles3.css}">
+    <link rel="stylesheet" th:href="@{/css/styles4.css}">
+</head>
+<body>
+<div class="popup">
+    <h1>Thank you for your order!</h1>
+    <div class="summary-box">
+        <p><strong>Title:</strong> <span th:text="${order.title}"></span></p>
+        <p><strong>First Name:</strong> <span th:text="${order.fname}"></span></p>
+        <p><strong>Last Name:</strong> <span th:text="${order.lname}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${order.email}"></span></p>
+        <p><strong>Phone:</strong> <span th:text="${order.phone}"></span></p>
+        <p><strong>Address:</strong> <span th:text="${order.address}"></span></p>
+        <p><strong>Order Details:</strong> <span th:text="${order.order_Details}"></span></p>
+        <p><strong>Payment Method:</strong> <span th:text="${order.paymentMethod}"></span></p>
+
+        <div class="button-container">
+            <button type="button" class="home-btn">Go to home</button>
+            <button type="button" class="cancel-btn" onclick="showConfirmation()">Cancel Order</button>
+            <button type="button" class="update-btn" onclick="showEditForm()">Edit Order</button>
+        </div>
+    </div>
+</div>
+
+<div id="confirmPopup" class="confirm-popup">
+    <div class="confirm-box">
+        <p>Are you sure you want to cancel this order?</p>
+        <div class="popup-buttons">
+            <form th:action="@{/delete}" method="post" style="display:inline;">
+                <button type="submit" class="yes-btn">Yes</button>
+            </form>
+            <button type="button" onclick="hideConfirmation()" class="no-btn">No</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="editFormContainer" class="edit-form-popup" style="display: none;">
+    <form th:action="@{/update}" method="post" class="edit-form">
+        <h2>Edit Order</h2>
+
+        <label for="title">Title</label>
+        <select name="title" required>
+            <option value="">Select</option>
+            <option value="Mr">Mr</option>
+            <option value="Mrs">Mrs</option>
+            <option value="Miss">Miss</option>
+            <option value="Dr">Dr</option>
+        </select>
+
+        <label>First Name:</label>
+        <input type="text" name="fname" th:value="${order.fname}" required>
+
+        <label>Last Name:</label>
+        <input type="text" name="lname" th:value="${order.lname}" required>
+
+        <label>Email:</label>
+        <input type="email" name="email" th:value="${order.email}" required>
+
+        <label>Phone:</label>
+        <input type="text" name="phone" th:value="${order.phone}" required>
+
+        <label>Address:</label>
+        <input type="text" name="address" th:value="${order.address}" required>
+
+        <label>Order Details:</label>
+        <textarea name="order_Details" required th:text="${order.order_Details}"></textarea>
+
+        <label for="paymentMethod">Payment Method</label>
+        <select name="paymentMethod" required>
+            <option value="">Select</option>
+            <option value="card">Credit Card</option>
+            <option value="Cash on delivery">Cash on Delivery</option>
+        </select>
+
+        <div class="button-container">
+            <button type="submit" class="save-btn">Save Changes</button>
+            <button type="button" class="cancel-edit-btn" onclick="hideEditForm()">Cancel</button>
+        </div>
+    </form>
+</div>
+
+
+<script th:src="@{/js/orderDetails.js}"></script>
+<script>
+    function showEditForm() {
+        document.getElementById("editFormContainer").style.display = "block";
+    }
+
+    function hideEditForm() {
+        document.getElementById("editFormContainer").style.display = "none";
+    }
+</script>
+
+</body>
+</html>
