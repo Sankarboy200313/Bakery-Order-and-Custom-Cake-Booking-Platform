@@ -89,6 +89,4 @@ public class Payment
                 ", Payment Method='" + paymentMethod + '\'' +
                 '}';
     }
-
-
 }

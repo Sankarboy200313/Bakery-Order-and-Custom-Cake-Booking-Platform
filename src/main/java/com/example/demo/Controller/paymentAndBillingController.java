@@ -1,11 +1,12 @@
 package com.example.demo.Controller;
 
 import com.example.demo.model.Payment;
+import com.example.demo.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,39 +15,8 @@ import java.util.*;
 @Controller
 public class paymentAndBillingController {
 
-    private Payment lastOrder; // Temporarily holds the last order for editing
-
-    @GetMapping("/")
-    public String index() {
-        return "customOrder";
-    }
-
-    @GetMapping("/summary")
-    public String showSummaryPage(
-            @RequestParam String flavor,
-            @RequestParam String shape,
-            @RequestParam(required = false) List<String> toppings,
-            @RequestParam String message,
-            Model model
-    ) {
-        model.addAttribute("flavor", flavor);
-        model.addAttribute("shape", shape);
-        model.addAttribute("toppings", toppings);
-        model.addAttribute("message", message);
-
-        // Build order details string to pass to payment page
-        StringBuilder orderDetails = new StringBuilder();
-        orderDetails.append("Flavor: ").append(flavor).append(", ");
-        orderDetails.append("Shape: ").append(shape);
-        if (toppings != null && !toppings.isEmpty()) {
-            orderDetails.append(", Toppings: ").append(String.join(", ", toppings));
-        }
-        orderDetails.append(", Message: ").append(message);
-
-        model.addAttribute("orderDetails", orderDetails.toString());
-
-        return "summary";
-    }
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/payment")
     public String showPaymentForm(
@@ -73,15 +43,16 @@ public class paymentAndBillingController {
     @PostMapping("/order")
     public String userRegistration(@ModelAttribute Payment user, RedirectAttributes redirectAttributes) {
         saveOrderToFile(user);
-        lastOrder = user;
+        orderService.setLastOrder(user);
         redirectAttributes.addFlashAttribute("order", user);
         return "redirect:/order-details";
     }
 
     @GetMapping("/order-details")
     public String showOrderDetailsPage(Model model) {
-        if (!model.containsAttribute("order") && lastOrder != null) {
-            model.addAttribute("order", lastOrder);
+        Payment last = orderService.getLastOrder();
+        if (!model.containsAttribute("order") && last != null) {
+            model.addAttribute("order", last);
         }
         return "order-details";
     }
@@ -89,7 +60,7 @@ public class paymentAndBillingController {
     @PostMapping("/update")
     public String updateOrder(@ModelAttribute Payment updatedOrder, RedirectAttributes redirectAttributes) {
         updateLastOrderInFile(updatedOrder);
-        lastOrder = updatedOrder;
+        orderService.setLastOrder(updatedOrder);
         redirectAttributes.addFlashAttribute("order", updatedOrder);
         return "redirect:/order-details";
     }
@@ -117,10 +88,10 @@ public class paymentAndBillingController {
                     try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
                         writer.write("");
                     }
-                    System.out.println("All orders deleted.");
+                    System.out.println("Last orders deleted successfully.");
                 }
 
-                lastOrder = null;
+                orderService.setLastOrder(null);
             } else {
                 System.out.println("Order file does not exist.");
             }
