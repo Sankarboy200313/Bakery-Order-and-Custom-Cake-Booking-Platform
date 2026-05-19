@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>About Us</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<nav>
+    <input type="checkbox" id="res-menu">
+    <label for="res-menu">
+        <i class="fas fa-bars" id="s1"></i>
+        <i class="fas fa-times" id="s2"></i>
+    </label>
+    <h2>Your Online</h2>
+    <h1>Bakery Store</h1>
+    <ul>
+        <li><a th:href="@{/dashboard}">Home</a></li>
+        <li><a th:href="@{/order}">Order</a></li>
+        <li><a th:href="@{/aboutUs}">About Us</a></li>
+        <li><a th:href="@{/service}">Services</a></li>
+        <li th:if="${isLoggedIn and isAdmin}"><a th:href="@{/admin-dashboard}">Admin</a></li>
+        <li th:if="${!isLoggedIn}" class="nav-button"><a href="/login">Login</a></li>
+        <li th:if="${isLoggedIn}" class="nav-button"><a href="/profile">Profile</a></li>
+    </ul>
+</nav>
+<hr>
+<section class="about-us">
+    <div class="about-container">
+        <div class="about-text">
+            <h2>About Us</h2>
+            <p>Welcome to Our Online Bakery Store, where we bring you the finest handcrafted baked goods made with love and the highest quality ingredients. From our warm, freshly baked bread to our decadent pastries, every item is made with care and passion. Our bakery is committed to providing a delightful experience for all of our customers, offering a wide range of delicious treats for every occasion. Whether you are picking up a loaf of bread for dinner or ordering a custom cake for a special celebration, we promise to deliver fresh, delicious products that make every moment a little sweeter.</p>
+            <p>At Our Online Bakery Store, we believe in the power of tradition and the joy of sharing a homemade treat with family and friends. Our recipes are carefully crafted, blending classic techniques with innovative twists to keep things exciting. Each product is a reflection of our dedication to quality, from sourcing local ingredients to ensuring that every bite is a moment of happiness. Our team works tirelessly to create the perfect experience for you, whether you are visiting us for the first time or coming back for your favorite pastry.</p>
+            <p>Thank you for choosing us. We cannot wait to serve you. Join us in celebrating the simple pleasures of life, one delicious bite at a time.</p>
+            <a th:href="@{/contactUs}" class="about-btn">Contact Us</a>
+        </div>
+    </div>
+</section>
+</body>
+</html>

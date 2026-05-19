@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<!-- Navigation header and list -->
+<nav>
+    <input type="checkbox" id="res-menu">
+    <label for="res-menu">
+        <i class="fas fa-bars" id="s1"></i>
+        <i class="fas fa-times" id="s2"></i>
+    </label>
+    <h2>Your Online</h2>
+    <h1>Bakery Store</h1>
+    <ul>
+        <li><a th:href="@{/dashboard}">Home</a></li>
+        <li><a th:href="@{/order}">Order</a></li>
+        <li><a th:href="@{/aboutUs}">About Us</a></li>
+        <li><a th:href="@{/service}">Services</a></li>
+        <li th:if="${isLoggedIn and isAdmin}"><a th:href="@{/admin-dashboard}">Admin</a></li>
+        <li th:if="${!isLoggedIn}" class="nav-button"><a href="/login">Login</a></li>
+        <li th:if="${isLoggedIn}" class="nav-button"><a href="/profile">Profile</a></li>
+    </ul>
+</nav>
+<hr>
+<!-- Signup form container -->
+<div class="signup-container">
+    <h2>Sign Up</h2>
+    <!-- Display error message if present -->
+    <p th:if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></p>
+    <form th:action="@{/signup}" method="post">
+        <input type="text" class="input-field" placeholder="Username" name="username" required>
+        <input type="password" class="input-field" placeholder="Password" name="password" required>
+        <input type="password" class="input-field" placeholder="Confirm Password" name="confirm_password" required>
+        <input type="text" class="input-field" placeholder="Full Name" name="fullname" required>
+        <input type="email" class="input-field" placeholder="Email" name="email" required>
+        <input type="tel" class="input-field" placeholder="Telephone No" name="telephon_no" required>
+        <button type="submit" class="submit-btn">Sign Up</button>
+    </form>
+    <br>
+    <a th:href="@{/login}">Back to Login</a>
+</div>
+</body>
+</html>
