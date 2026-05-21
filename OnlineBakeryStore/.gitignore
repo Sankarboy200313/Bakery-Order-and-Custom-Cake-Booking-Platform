@@ -1,0 +1,12 @@
+target/
+.idea/
+.vscode/
+*.iml
+*.log
+*.class
+*.jar
+.DS_Store
+Thumbs.db
+
+# Local bakery data is stored outside the repo by default
+.online-bakery-store/

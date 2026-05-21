@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <!-- Link to external stylesheet -->
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/admin.css">
 </head>
-</head>
 <body>
-<!-- Navigation header and list -->
 <nav>
     <input type="checkbox" id="res-menu">
     <label for="res-menu">
@@ -22,49 +19,261 @@
     <ul>
         <li><a th:href="@{/dashboard}">Home</a></li>
         <li><a th:href="@{/order}">Order</a></li>
-        <li><a th:href="@{/chart}">Chart</a></li>
+        <li><a href="#analytics">Analytics</a></li>
         <li><a th:href="@{/aboutUs}">About Us</a></li>
         <li><a th:href="@{/service}">Services</a></li>
-        <li><a th:if="${isLoggedIn and isAdmin}" href="/admin-dashboard">User Details</a></li>
+        <li><a th:if="${isLoggedIn and isAdmin}" href="/admin-dashboard">Admin</a></li>
         <li th:if="${!isLoggedIn}" class="nav-button"><a href="/login">Login</a></li>
         <li th:if="${isLoggedIn}" class="nav-button"><a href="/profile">Profile</a></li>
     </ul>
 </nav>
-<hr>
+<main class="admin-shell">
+    <section class="admin-hero">
+        <div>
+            <span class="eyebrow">Bakery Control Center</span>
+            <h2>Manage users, products, and orders in one place.</h2>
+            <p>Use this panel to update staff access, publish new menu items, and keep the order queue moving smoothly.</p>
+        </div>
+        <div class="admin-hero-grid">
+            <div class="stat-card"><strong th:text="${totalUsers}">0</strong><span>Users</span></div>
+            <div class="stat-card"><strong th:text="${totalProducts}">0</strong><span>Products</span></div>
+            <div class="stat-card"><strong th:text="${totalOrders}">0</strong><span>Orders</span></div>
+            <div class="stat-card"><strong th:text="${openOrders}">0</strong><span>Open Orders</span></div>
+        </div>
+    </section>
 
-<div class="dashboard-content">
-    <h2>Admin Dashboard</h2>
-    <h3>All Users</h3>
-    <div th:if="${error}" class="error">
-        <p th:text="${error}"></p>
-    </div>
-    <table>
-        <thead>
-        <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Full Name</th>
-            <th>Telephone</th>
-            <th>Admin</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:if="${users == null or #lists.isEmpty(users)}">
-            <td colspan="6">No users found or data unavailable.</td>
-        </tr>
-        <tr th:each="user : ${users}" th:unless="${users == null}">
-            <td th:text="${user.username} ?: 'N/A'"></td>
-            <td th:text="${user.email} ?: 'N/A'"></td>
-            <td th:text="${user.fullname} ?: 'N/A'"></td>
-            <td th:text="${user.telephoneNo} ?: 'N/A'"></td>
-            <td th:text="${user.isAdmin() ? 'Yes' : 'No'}"></td>
-            <td>
-                <a th:href="@{/admin/edit-user(username=${user.username})}" th:text="'Edit'"></a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+    <section class="panel">
+        <div class="panel-header">
+            <h3>Users</h3>
+            <p>Customer and staff accounts stored in the bakery registry.</p>
+        </div>
+        <div th:if="${error}" class="error" th:text="${error}"></div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Full Name</th>
+                    <th>Telephone</th>
+                    <th>Admin</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${users == null or #lists.isEmpty(users)}">
+                    <td colspan="6">No users found.</td>
+                </tr>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.fullname}"></td>
+                    <td th:text="${user.telephoneNo}"></td>
+                    <td th:text="${user.isAdmin() ? 'Yes' : 'No'}"></td>
+                    <td class="row-actions">
+                        <a class="chip-link" th:href="@{/admin/edit-user(username=${user.username})}">Edit</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="panel split">
+        <div>
+            <div class="panel-header">
+                <h3>Add Product</h3>
+                <p>Create a new bakery item or seasonal special.</p>
+            </div>
+            <form class="stack-form" th:action="@{/admin/product/save}" method="post">
+                <input type="hidden" name="id" value="0">
+                <label>Name</label>
+                <input type="text" name="name" placeholder="Chocolate Truffle Cake" required>
+                <label>Category</label>
+                <input type="text" name="category" placeholder="Custom Cakes" required>
+                <label>Price</label>
+                <input type="number" name="price" step="0.01" min="0" required>
+                <label>Stock</label>
+                <input type="number" name="stock" min="0" required>
+                <label>Description</label>
+                <textarea name="description" rows="4" placeholder="Describe the product"></textarea>
+                <label>Image Path</label>
+                <input type="text" name="imagePath" placeholder="/Image/chocolate-cake..jpg">
+                <label class="checkbox-row"><input type="checkbox" name="featured" value="true"> Featured</label>
+                <button type="submit">Save Product</button>
+            </form>
+        </div>
+        <div>
+            <div class="panel-header">
+                <h3>Products</h3>
+                <p>Edit existing menu items or remove old stock.</p>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Featured</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${products == null or #lists.isEmpty(products)}">
+                        <td colspan="6">No products found.</td>
+                    </tr>
+                    <tr th:each="product : ${products}">
+                        <td th:text="${product.name}"></td>
+                        <td th:text="${product.category}"></td>
+                        <td th:text="${product.priceLabel}"></td>
+                        <td th:text="${product.stock}"></td>
+                        <td th:text="${product.featured ? 'Yes' : 'No'}"></td>
+                        <td class="row-actions">
+                            <a class="chip-link" th:href="@{/admin/edit-product(id=${product.id})}">Edit</a>
+                            <form th:action="@{/admin/product/delete}" method="post" class="inline-form">
+                                <input type="hidden" name="id" th:value="${product.id}">
+                                <button type="submit" class="danger-btn" onclick="return confirm('Delete this product?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-header">
+            <h3>Orders</h3>
+            <p>Change the status of bakery orders as they move through the kitchen.</p>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Customer</th>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Delivery</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${orders == null or #lists.isEmpty(orders)}">
+                    <td colspan="8">No orders found.</td>
+                </tr>
+                <tr th:each="order : ${orders}">
+                    <td th:text="${order.id}"></td>
+                    <td th:text="${order.customerName}"></td>
+                    <td th:text="${order.productName}"></td>
+                    <td th:text="${order.quantity}"></td>
+                    <td th:text="${order.totalPriceLabel}"></td>
+                    <td>
+                        <form th:action="@{/admin/order/update-status}" method="post" class="inline-form">
+                            <input type="hidden" name="id" th:value="${order.id}">
+                            <select name="status">
+                                <option th:selected="${order.status == 'Processing'}">Processing</option>
+                                <option th:selected="${order.status == 'Preparing'}">Preparing</option>
+                                <option th:selected="${order.status == 'Out for Delivery'}">Out for Delivery</option>
+                                <option th:selected="${order.status == 'Delivered'}">Delivered</option>
+                            </select>
+                            <button type="submit" class="chip-link">Update</button>
+                        </form>
+                    </td>
+                    <td th:text="${order.deliveryDate}"></td>
+                    <td class="row-actions">
+                        <form th:action="@{/admin/order/delete}" method="post" class="inline-form">
+                            <input type="hidden" name="id" th:value="${order.id}">
+                            <button type="submit" class="danger-btn" onclick="return confirm('Delete this order?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="stats-grid" id="analytics">
+        <div class="stat-card big"><strong th:text="${totalProducts}">0</strong><span>Total Products</span></div>
+        <div class="stat-card big"><strong th:text="${totalOrders}">0</strong><span>Total Orders</span></div>
+        <div class="stat-card big"><strong th:text="${openOrders}">0</strong><span>Open Orders</span></div>
+        <div class="stat-card big"><strong th:text="${totalRevenueLabel}">$0.00</strong><span>Revenue</span></div>
+    </section>
+
+    <section class="analytics-layout">
+        <div class="panel">
+            <div class="panel-header">
+                <h3>Stock Levels</h3>
+                <p>Higher bars mean more items available right now.</p>
+            </div>
+            <div class="bar-list">
+                <div th:each="product : ${products}" class="bar-row">
+                    <div class="bar-label">
+                        <span th:text="${product.name}"></span>
+                        <span th:text="${product.stock} + ' pcs'"></span>
+                    </div>
+                    <div class="bar-track">
+                        <span class="bar-fill" th:style="'width:' + (${product.stock * 100 / maxStock}) + '%'"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-header">
+                <h3>Recent Orders</h3>
+                <p>A quick look at the most recent tickets in the queue.</p>
+            </div>
+            <div class="timeline">
+                <article th:each="order : ${recentOrders}" class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div>
+                        <strong th:text="${order.productName}"></strong>
+                        <p>
+                            <span th:text="${order.customerName}"></span>
+                            <span> | </span>
+                            <span th:text="${order.status}"></span>
+                            <span> | </span>
+                            <span th:text="${order.totalPriceLabel}"></span>
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-header">
+            <h3>Product Table</h3>
+            <p>Use this as a mini inventory report when reviewing the bakery menu.</p>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Featured</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product : ${products}">
+                    <td th:text="${product.name}"></td>
+                    <td th:text="${product.category}"></td>
+                    <td th:text="${product.priceLabel}"></td>
+                    <td th:text="${product.stock}"></td>
+                    <td th:text="${product.featured ? 'Yes' : 'No'}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
 </body>
 </html>

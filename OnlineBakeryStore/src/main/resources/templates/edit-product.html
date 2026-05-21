@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+<nav>
+    <input type="checkbox" id="res-menu">
+    <label for="res-menu">
+        <i class="fas fa-bars" id="s1"></i>
+        <i class="fas fa-times" id="s2"></i>
+    </label>
+    <h2>Your Online</h2>
+    <h1>Bakery Store</h1>
+    <ul>
+        <li><a th:href="@{/dashboard}">Home</a></li>
+        <li><a th:href="@{/order}">Order</a></li>
+        <li><a th:href="@{/aboutUs}">About Us</a></li>
+        <li><a th:href="@{/service}">Services</a></li>
+        <li th:if="${isLoggedIn and isAdmin}"><a th:href="@{/admin-dashboard}">Admin</a></li>
+        <li th:if="${!isLoggedIn}" class="nav-button"><a href="/login">Login</a></li>
+        <li th:if="${isLoggedIn}" class="nav-button"><a href="/profile">Profile</a></li>
+    </ul>
+</nav>
+<main class="admin-shell">
+    <section class="panel narrow">
+        <div class="panel-header">
+            <h3>Edit Product</h3>
+            <p>Update bakery menu details and save the changes.</p>
+        </div>
+        <form class="stack-form" th:action="@{/admin/product/save}" method="post">
+            <input type="hidden" name="id" th:value="${product.id}">
+            <label>Name</label>
+            <input type="text" name="name" th:value="${product.name}" required>
+            <label>Category</label>
+            <input type="text" name="category" th:value="${product.category}" required>
+            <label>Price</label>
+            <input type="number" name="price" step="0.01" min="0" th:value="${product.price}" required>
+            <label>Stock</label>
+            <input type="number" name="stock" min="0" th:value="${product.stock}" required>
+            <label>Description</label>
+            <textarea name="description" rows="4" th:text="${product.description}"></textarea>
+            <label>Image Path</label>
+            <input type="text" name="imagePath" th:value="${product.imagePath}">
+            <label class="checkbox-row"><input type="checkbox" name="featured" value="true" th:checked="${product.featured}"> Featured</label>
+            <button type="submit">Update Product</button>
+        </form>
+    </section>
+</main>
+</body>
+</html>
