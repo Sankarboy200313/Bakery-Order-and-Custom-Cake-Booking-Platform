@@ -20,36 +20,69 @@
     <ul>
         <li><a th:href="@{/dashboard}">Home</a></li>
         <li><a th:href="@{/order}">Order</a></li>
-        <li><a th:href="@{/chart}">Chart</a></li>
         <li><a th:href="@{/aboutUs}">About Us</a></li>
         <li><a th:href="@{/service}">Services</a></li>
+        <li th:if="${isLoggedIn and isAdmin}"><a th:href="@{/admin-dashboard}">Admin</a></li>
         <li th:if="${!isLoggedIn}" class="nav-button"><a href="/login">Login</a></li>
         <li th:if="${isLoggedIn}" class="nav-button"><a href="/profile">Profile</a></li>
     </ul>
 </nav>
-<hr>
+<section class="page-hero">
+    <div>
+        <span class="eyebrow">Our Services</span>
+        <h2>More ways to order, celebrate, and deliver sweetness.</h2>
+        <p>We expanded the bakery experience with tailored service packages, premium gift options, and custom planning support.</p>
+    </div>
+    <div class="hero-badges">
+        <span th:text="${featuredCount + ' Featured'}"></span>
+        <span>Bulk Orders</span>
+        <span>Gift Boxes</span>
+        <span>Catering</span>
+    </div>
+</section>
+
 <section class="services">
-    <h2>Our Services</h2>
+    <h2>Featured Service Stack</h2>
     <div class="service-container">
         <div class="service-box">
-            <img src="Image/chocolate-cake..jpg" alt="Custom Cakes">
-            <h3>Custom Cakes</h3>
-            <p>Order personalized cakes for birthdays, weddings, and special events.</p>
+            <img src="/Image/chocolate-cake..jpg" alt="Custom Cakes">
+            <h3>Custom Cake Design</h3>
+            <p>Choose flavours, fillings, toppings, and a theme for birthdays, weddings, and celebrations.</p>
         </div>
         <div class="service-box">
             <img src="/Image/pastries-display.jpg" alt="Freshly Baked Goods">
-            <h3>Freshly Baked Goods</h3>
-            <p>Enjoy a variety of fresh bread, pastries, and cookies every day.</p>
+            <h3>Fresh Daily Bakes</h3>
+            <p>Warm bread, pastries, and cookies prepared every morning for pickup or delivery.</p>
         </div>
         <div class="service-box">
             <img src="/Image/mobile-ordering.jpg" alt="Online Ordering">
-            <h3>Online Ordering</h3>
-            <p>Place your order online and get doorstep delivery or easy pickup.</p>
+            <h3>Fast Online Ordering</h3>
+            <p>Reserve items, schedule pickup, and receive delivery updates from one clean page.</p>
         </div>
         <div class="service-box">
             <img src="/Image/buffet-table.jpg" alt="Catering Services">
-            <h3>Catering Services</h3>
-            <p>We provide bakery catering for corporate events, parties, and celebrations.</p>
+            <h3>Event Catering</h3>
+            <p>Bakery platters and dessert tables for offices, birthdays, and special functions.</p>
+        </div>
+    </div>
+</section>
+
+<section class="feature-band">
+    <div class="feature-card">
+        <h3>What We Added</h3>
+        <ul>
+            <li th:each="highlight : ${serviceHighlights}" th:text="${highlight}"></li>
+        </ul>
+    </div>
+    <div class="feature-card product-preview">
+        <h3>Featured Products</h3>
+        <div th:each="product : ${featuredProducts}" class="mini-product">
+            <img th:src="${product.imagePath}" th:alt="${product.name}">
+            <div>
+                <strong th:text="${product.name}"></strong>
+                <p th:text="${product.category}"></p>
+                <span th:text="${product.priceLabel}"></span>
+            </div>
         </div>
     </div>
 </section>

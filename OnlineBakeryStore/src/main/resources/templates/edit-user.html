@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <!-- Link to external stylesheet -->
+    <title>Edit User</title>
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/admin.css">
 </head>
 <body>
-<!-- Navigation header and list -->
 <nav>
     <input type="checkbox" id="res-menu">
     <label for="res-menu">
@@ -21,7 +19,6 @@
     <ul>
         <li><a th:href="@{/dashboard}">Home</a></li>
         <li><a th:href="@{/order}">Order</a></li>
-        <li><a th:href="@{/chart}">Chart</a></li>
         <li><a th:href="@{/aboutUs}">About Us</a></li>
         <li><a th:href="@{/service}">Services</a></li>
         <li><a th:if="${isLoggedIn and isAdmin}" href="/admin-dashboard">User Details</a></li>
@@ -30,23 +27,13 @@
     </ul>
 </nav>
 <hr>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 <div class="form-container">
-
-
     <div th:if="${error}" class="error">
         <p th:text="${error}"></p>
     </div>
 
     <form th:action="@{/admin/update-user}" method="post">
         <h2>Edit User</h2>
-        <br>
-        <br>
         <input type="hidden" name="oldUsername" th:value="${user.username}"/>
 
         <div class="form-group">
@@ -82,11 +69,8 @@
         <div class="form-group">
             <button type="submit" class="btn-submit">Update User</button>
         </div>
-        <a href="/admin-dashboard" class="back-link">← Back to Admin Dashboard</a>
+        <a href="/admin-dashboard" class="back-link">&#8592; Back to Admin Dashboard</a>
     </form>
-
-
 </div>
-
 </body>
 </html>

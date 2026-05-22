@@ -19,9 +19,9 @@
     <ul>
         <li><a th:href="@{/dashboard}">Home</a></li>
         <li><a th:href="@{/order}">Order</a></li>
-        <li><a th:href="@{/chart}">Chart</a></li>
         <li><a th:href="@{/aboutUs}">About Us</a></li>
         <li><a th:href="@{/service}">Services</a></li>
+        <li th:if="${isLoggedIn and isAdmin}"><a th:href="@{/admin-dashboard}">Admin</a></li>
         <li th:if="${!isLoggedIn}" class="nav-button"><a href="/login">Login</a></li>
         <li th:if="${isLoggedIn}" class="nav-button"><a href="/profile">Profile</a></li>
     </ul>

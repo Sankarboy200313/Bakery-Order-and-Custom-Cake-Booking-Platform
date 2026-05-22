@@ -5,13 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Order</title>
-    <!-- Link to Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Link to the CSS file -->
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-<!-- Navigation Bar -->
 <nav>
     <input type="checkbox" id="res-menu">
     <label for="res-menu">
@@ -23,14 +20,88 @@
     <ul>
         <li><a th:href="@{/dashboard}">Home</a></li>
         <li><a th:href="@{/order}">Order</a></li>
-        <li><a th:href="@{/chart}">Chart</a></li>
         <li><a th:href="@{/aboutUs}">About Us</a></li>
         <li><a th:href="@{/service}">Services</a></li>
+        <li th:if="${isLoggedIn and isAdmin}"><a th:href="@{/admin-dashboard}">Admin</a></li>
         <li th:if="${!isLoggedIn}" class="nav-button"><a href="/login">Login</a></li>
         <li th:if="${isLoggedIn}" class="nav-button"><a href="/profile">Profile</a></li>
     </ul>
 </nav>
-<hr>
-<hr>
+
+<section class="page-hero">
+    <div>
+        <span class="eyebrow">Order Studio</span>
+        <h2>Build a custom order from the bakery catalog.</h2>
+        <p>Pick a product, set the quantity, add a delivery date, and we will keep the order queue updated for you.</p>
+    </div>
+    <div class="hero-badges">
+        <span th:text="${featuredCount} + ' featured items'"></span>
+        <span>Pickup</span>
+        <span>Delivery</span>
+        <span>Custom Notes</span>
+    </div>
+</section>
+
+<section class="products-grid">
+    <div class="product-card" th:each="product : ${products}">
+        <img th:src="${product.imagePath}" th:alt="${product.name}">
+        <div class="product-body">
+            <div class="product-topline">
+                <h3 th:text="${product.name}"></h3>
+                <span class="price" th:text="${product.priceLabel}"></span>
+            </div>
+            <p th:text="${product.description}"></p>
+            <div class="product-meta">
+                <span th:text="${product.category}"></span>
+                <span th:text="${product.stock} + ' in stock'"></span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="order-layout">
+    <div class="panel">
+        <div class="panel-header">
+            <h3>Place Order</h3>
+            <p>Submit the details and the order will be saved into the bakery queue.</p>
+        </div>
+        <div th:if="${param.success}" class="success-banner">Your order has been placed successfully.</div>
+        <div th:if="${error}" class="error" th:text="${error}"></div>
+        <form class="stack-form" th:action="@{/order/place}" method="post">
+            <label>Select Product</label>
+            <select name="productId" required>
+                <option value="" disabled selected>Choose a product</option>
+                <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name + ' - ' + product.priceLabel}"></option>
+            </select>
+            <label>Quantity</label>
+            <input type="number" name="quantity" min="1" value="1" required>
+            <label>Delivery Date</label>
+            <input type="date" name="deliveryDate" required>
+            <label>Contact Number</label>
+            <input type="tel" name="contact" placeholder="0771234567" required>
+            <label>Special Note</label>
+            <textarea name="note" rows="4" placeholder="Colour theme, message, allergy note, etc."></textarea>
+            <button type="submit">Place Order</button>
+        </form>
+    </div>
+    <div class="panel">
+        <div class="panel-header">
+            <h3>Recent Orders</h3>
+            <p>The latest saved orders appear here so customers can see the queue take shape.</p>
+        </div>
+        <div class="order-cards">
+            <article th:each="order : ${recentOrders}" class="order-card">
+                <div>
+                    <strong th:text="${order.productName}"></strong>
+                    <p th:text="${order.customerName}"></p>
+                </div>
+                <div class="order-card-meta">
+                    <span th:text="${order.status}"></span>
+                    <span th:text="${order.totalPriceLabel}"></span>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
 </body>
 </html>

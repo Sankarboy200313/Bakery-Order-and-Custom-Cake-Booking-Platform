@@ -1,65 +1,58 @@
 package com.sesc.onlinebakerystore.controller;
 
-import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.sesc.onlinebakerystore.model.BakeryProduct;
+import com.sesc.onlinebakerystore.service.BakeryStoreService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.sesc.onlinebakerystore.service.UserService;
+import java.io.IOException;
+import java.util.List;
 
-// @Controller indicates this class handles HTTP requests for page navigation
 @Controller
 public class PageController {
+    private final BakeryStoreService bakeryStoreService;
 
-    @Autowired
-    private UserService userService;
+    public PageController(BakeryStoreService bakeryStoreService) {
+        this.bakeryStoreService = bakeryStoreService;
+    }
 
-    // Displays the dashboard page
+    @GetMapping("/")
+    public String home() {
+        return "redirect:/dashboard";
+    }
+
     @GetMapping("/dashboard")
-    public String dashboard(HttpSession session, Model model) {
-        Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
-        model.addAttribute("isLoggedIn", isLoggedIn != null ? isLoggedIn : false);
-        return "dashboard"; // Returns dashboard.html
+    public String dashboard() {
+        return "dashboard";
     }
 
-    // Displays the services page
     @GetMapping("/service")
-    public String service(HttpSession session, Model model) {
-        Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
-        model.addAttribute("isLoggedIn", isLoggedIn != null ? isLoggedIn : false);
-        return "service"; // Returns service.html
+    public String service(Model model) throws IOException {
+        List<BakeryProduct> featuredProducts = bakeryStoreService.getFeaturedProducts();
+        model.addAttribute("featuredProducts", featuredProducts);
+        model.addAttribute("featuredCount", featuredProducts.size());
+        model.addAttribute("serviceHighlights", List.of(
+                "Custom cake design consultation",
+                "Same-day pickup and delivery",
+                "Corporate catering trays",
+                "Seasonal gift box subscriptions"
+        ));
+        return "service";
     }
 
-    // Displays the about us page
     @GetMapping("/aboutUs")
-    public String aboutUs(HttpSession session, Model model) {
-        Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
-        model.addAttribute("isLoggedIn", isLoggedIn != null ? isLoggedIn : false);
-        return "aboutUs"; // Returns aboutUs.html
+    public String aboutUs() {
+        return "aboutUs";
     }
 
-    // Displays the chart page
     @GetMapping("/chart")
-    public String chart(HttpSession session, Model model) {
-        Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
-        model.addAttribute("isLoggedIn", isLoggedIn != null ? isLoggedIn : false);
-        return "chart"; // Returns chart.html
+    public String chart() {
+        return "redirect:/admin-dashboard#analytics";
     }
 
-    // Displays the order page
-    @GetMapping("/order")
-    public String order(HttpSession session, Model model) {
-        Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
-        model.addAttribute("isLoggedIn", isLoggedIn != null ? isLoggedIn : false);
-        return "order"; // Returns order.html
-    }
-
-    // Displays the contact us page
     @GetMapping("/contactUs")
-    public String contactUs(HttpSession session, Model model) {
-        Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
-        model.addAttribute("isLoggedIn", isLoggedIn != null ? isLoggedIn : false);
-        return "contactUs"; // Returns contactUs.html
+    public String contactUs() {
+        return "contactUs";
     }
 }

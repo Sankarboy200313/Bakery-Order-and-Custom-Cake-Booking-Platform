@@ -224,3 +224,72 @@ h2{
     text-align: center;
     color: black;
 }
+
+.admin-shell {
+    padding: 120px 0 36px;
+    display: grid;
+    gap: 22px;
+}
+
+.admin-hero {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 18px;
+    align-items: stretch;
+    background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(255,248,240,0.94));
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+}
+
+.admin-hero h2 {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    color: var(--ink);
+    text-align: left;
+}
+
+.admin-hero p {
+    color: #6f5946;
+    max-width: 720px;
+}
+
+.admin-hero-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.stat-card {
+    padding: 18px;
+    display: grid;
+    gap: 8px;
+    align-content: start;
+}
+
+.stat-card strong {
+    font-size: 2rem;
+    color: var(--accent-strong);
+}
+
+.stat-card span {
+    color: #7a644d;
+}
+
+.panel.split {
+    grid-template-columns: 1fr 1fr;
+}
+
+.panel.narrow {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+    .admin-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .panel.split {
+        grid-template-columns: 1fr;
+    }
+}

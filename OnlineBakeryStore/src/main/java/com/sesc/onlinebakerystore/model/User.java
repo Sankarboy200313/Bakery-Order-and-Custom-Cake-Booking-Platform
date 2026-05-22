@@ -1,33 +1,33 @@
 package com.sesc.onlinebakerystore.model;
 
-// Class representing a User entity
 public class User {
     private String username;
     private String email;
     private String password;
     private String fullname;
     private String telephoneNo;
+    private boolean admin;
 
-    // Default constructor
-    public User() {}
+    public User() {
+    }
 
-    // Constructor with all fields
     public User(String username, String email, String password, String fullname, String telephoneNo) {
+        this(username, email, password, fullname, telephoneNo, false);
+    }
+
+    public User(String username, String email, String password, String fullname, String telephoneNo, boolean admin) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.fullname = fullname;
         this.telephoneNo = telephoneNo;
+        this.admin = admin;
     }
 
-    // Constructor for reading from file (without fullname and telephoneNo for backward compatibility)
     public User(String username, String email, String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
+        this(username, email, password, "", "", false);
     }
 
-    // Getters and setters
     public String getUsername() {
         return username;
     }
@@ -66,5 +66,13 @@ public class User {
 
     public void setTelephoneNo(String telephoneNo) {
         this.telephoneNo = telephoneNo;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }
